@@ -269,28 +269,18 @@ export function ProductsClient({ organizationId, initialProducts }: ProductsClie
                   <TableRow key={product.id}>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-3">
-                        <div className="relative h-12 w-12 overflow-hidden rounded-md bg-muted">
+                        <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md bg-muted">
                           {product.image_url ? (
                             <Image
                               src={product.image_url}
                               alt={product.name}
                               fill
                               className="object-cover"
-                              unoptimized={product.image_url.includes("supabase.co")}
-                              onError={(e) => {
-                                // Si l'image ne charge pas, afficher le placeholder
-                                e.currentTarget.style.display = "none";
-                                const parent = e.currentTarget.parentElement;
-                                if (parent && !parent.querySelector("span")) {
-                                  const placeholder = document.createElement("span");
-                                  placeholder.className = "flex h-full w-full items-center justify-center text-xs text-muted-foreground";
-                                  placeholder.textContent = product.name.slice(0, 2).toUpperCase();
-                                  parent.appendChild(placeholder);
-                                }
-                              }}
+                              sizes="48px"
+                              unoptimized
                             />
                           ) : (
-                            <span className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
+                            <span className="flex h-full w-full items-center justify-center text-xs font-medium text-muted-foreground">
                               {product.name.slice(0, 2).toUpperCase()}
                             </span>
                           )}
