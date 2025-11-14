@@ -5,7 +5,6 @@ import { z } from "zod";
 
 import { requireUser } from "@/lib/auth/session";
 import { PRODUCT_STATUSES } from "@/lib/constants";
-import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin-client";
 
 // Action serveur pour uploader une image
@@ -44,11 +43,12 @@ export async function uploadProductImageAction(
   const sanitizedName = file.name.replace(/\s+/g, "-").toLowerCase();
   const path = `${organizationId}/${Date.now()}-${sanitizedName}`;
 
-  // Utiliser le client serveur pour uploader
+  // Utiliser le client admin pour uploader (bypass RLS)
   try {
-    const supabase = await createSupabaseServerClient();
+    // Le client admin avec service role bypass complètement RLS
+    const adminClient = getSupabaseAdminClient();
 
-    const { error: uploadError } = await supabase.storage
+    const { error: uploadError } = await adminClient.storage
       .from("product-images")
       .upload(path, blob, {
         cacheControl: "3600",
@@ -60,7 +60,11 @@ export async function uploadProductImageAction(
       console.error("Erreur upload:", uploadError);
       
       // Si le bucket n'existe pas, donner un message clair
-      if (uploadError.message?.includes("Bucket not found") || uploadError.message?.includes("does not exist")) {
+      if (
+        uploadError.message?.includes("Bucket not found") ||
+        uploadError.message?.includes("does not exist") ||
+        uploadError.message?.includes("Bucket")
+      ) {
         return {
           status: "error",
           message: "Le bucket 'product-images' n'existe pas dans Supabase Storage. Veuillez le créer dans l'interface Supabase.",
@@ -73,7 +77,7 @@ export async function uploadProductImageAction(
       };
     }
 
-    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+    const { data } = adminClient.storage.from("product-images").getPublicUrl(path);
 
     return {
       status: "success",
@@ -336,7 +340,6 @@ export async function deleteProductAction(
   }
 
   const adminClient = getSupabaseAdminClient();
-  const supabase = await createSupabaseServerClient(); // Pour le storage uniquement
 
   // Utiliser le client admin pour bypasser RLS
   const { data: profile, error: profileError } = await adminClient
@@ -373,14 +376,14 @@ export async function deleteProductAction(
     };
   }
 
-  // Supprimer l'image du storage si elle existe
+  // Supprimer l'image du storage si elle existe (utiliser le client admin pour bypass RLS)
   if (existingProduct.image_url) {
     try {
       const urlParts = existingProduct.image_url.split("/");
       const fileName = urlParts[urlParts.length - 1];
       const path = `${profile.organization_id}/${fileName}`;
 
-      await supabase.storage.from("product-images").remove([path]);
+      await adminClient.storage.from("product-images").remove([path]);
     } catch (storageError) {
       console.warn("Impossible de supprimer l'image du storage:", storageError);
       // On continue quand même la suppression du produit
