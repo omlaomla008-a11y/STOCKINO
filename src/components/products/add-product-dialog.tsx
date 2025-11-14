@@ -5,8 +5,10 @@ import { useState, useTransition } from "react";
 import { Loader2, Upload } from "lucide-react";
 
 import { PRODUCT_STATUSES } from "@/lib/constants";
-import { createProductAction } from "@/lib/products/actions";
-import { useSupabaseBrowser } from "@/lib/supabase/hooks";
+import {
+  createProductAction,
+  uploadProductImageAction,
+} from "@/lib/products/actions";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -77,8 +79,6 @@ export function AddProductDialog({
   organizationId,
   disabled = false,
 }: AddProductDialogProps) {
-  const supabase = useSupabaseBrowser();
-
   const [form, setForm] = useState<FormState>(initialFormState);
   const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -119,26 +119,22 @@ export function AddProductDialog({
   const uploadImageIfNeeded = async () => {
     if (!file) return null;
 
-    const sanitizedName = file.name.replace(/\s+/g, "-").toLowerCase();
-    const path = `${organizationId}/${Date.now()}-${sanitizedName}`;
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("organizationId", organizationId);
 
-    const { error: uploadError } = await supabase.storage
-      .from("product-images")
-      .upload(path, file, {
-        cacheControl: "3600",
-        upsert: true,
-        contentType: file.type,
-      });
+      const result = await uploadProductImageAction(formData);
 
-    if (uploadError) {
-      throw uploadError;
+      if (result.status === "error") {
+        throw new Error(result.message ?? "Erreur lors de l'upload de l'image");
+      }
+
+      return result.imageUrl ?? null;
+    } catch (err) {
+      console.error("Erreur upload:", err);
+      throw err;
     }
-
-    const { data } = supabase.storage
-      .from("product-images")
-      .getPublicUrl(path);
-
-    return data?.publicUrl ?? null;
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

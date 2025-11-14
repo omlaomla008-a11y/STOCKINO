@@ -8,6 +8,86 @@ import { PRODUCT_STATUSES } from "@/lib/constants";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin-client";
 
+// Action serveur pour uploader une image
+export async function uploadProductImageAction(
+  formData: FormData,
+): Promise<{ status: "success" | "error"; imageUrl?: string | null; message?: string }> {
+  const user = await requireUser();
+  const file = formData.get("file") as File | null;
+  const organizationId = formData.get("organizationId") as string | null;
+
+  if (!file || !organizationId) {
+    return {
+      status: "error",
+      message: "Fichier ou organisation manquant.",
+    };
+  }
+
+  // Vérifier que l'utilisateur appartient à l'organisation
+  const adminClient = getSupabaseAdminClient();
+  const { data: profile } = await adminClient
+    .from("profiles")
+    .select("organization_id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (!profile || profile.organization_id !== organizationId) {
+    return {
+      status: "error",
+      message: "Vous n'avez pas le droit d'uploader des images pour cette organisation.",
+    };
+  }
+
+  // Convertir File en ArrayBuffer puis en Blob
+  const arrayBuffer = await file.arrayBuffer();
+  const blob = new Blob([arrayBuffer], { type: file.type });
+  const sanitizedName = file.name.replace(/\s+/g, "-").toLowerCase();
+  const path = `${organizationId}/${Date.now()}-${sanitizedName}`;
+
+  // Utiliser le client serveur pour uploader
+  try {
+    const supabase = await createSupabaseServerClient();
+
+    const { error: uploadError } = await supabase.storage
+      .from("product-images")
+      .upload(path, blob, {
+        cacheControl: "3600",
+        upsert: true,
+        contentType: file.type,
+      });
+
+    if (uploadError) {
+      console.error("Erreur upload:", uploadError);
+      
+      // Si le bucket n'existe pas, donner un message clair
+      if (uploadError.message?.includes("Bucket not found") || uploadError.message?.includes("does not exist")) {
+        return {
+          status: "error",
+          message: "Le bucket 'product-images' n'existe pas dans Supabase Storage. Veuillez le créer dans l'interface Supabase.",
+        };
+      }
+
+      return {
+        status: "error",
+        message: `Impossible de téléverser l'image: ${uploadError.message ?? "Erreur inconnue"}`,
+      };
+    }
+
+    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+
+    return {
+      status: "success",
+      imageUrl: data?.publicUrl ?? null,
+    };
+  } catch (error) {
+    console.error("Erreur upload:", error);
+    return {
+      status: "error",
+      message: error instanceof Error ? error.message : "Erreur lors du téléversement de l'image.",
+    };
+  }
+}
+
 const createProductSchema = z.object({
   organizationId: z.string().uuid(),
   name: z.string().min(1, "Le nom du produit est requis."),
