@@ -53,8 +53,7 @@ export async function uploadProductImageAction(
       .upload(path, buffer, {
         cacheControl: "3600",
         upsert: true,
-        contentType: file.type,
-        duplex: "half",
+        contentType: file.type || "image/jpeg",
       });
 
     if (uploadError) {
