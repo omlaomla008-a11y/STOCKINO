@@ -132,26 +132,46 @@ export async function createSaleAction(
     }
 
     // Créer les lignes de vente et mettre à jour les stocks
-    const salesItems = parsed.data.items.map((item) => ({
-      sale_id: newSale.id,
-      product_id: item.productId,
-      quantity: item.quantity,
-      unit_price: item.unitPrice,
-    }));
+    // S'assurer que les valeurs numériques sont bien formatées
+    const salesItems = parsed.data.items.map((item) => {
+      const unitPrice = parseFloat(String(item.unitPrice || 0));
+      const quantity = parseInt(String(item.quantity || 0), 10);
+      
+      // Valider les valeurs
+      if (isNaN(unitPrice) || unitPrice < 0) {
+        throw new Error(`Prix unitaire invalide pour le produit: ${item.productId}`);
+      }
+      if (isNaN(quantity) || quantity <= 0) {
+        throw new Error(`Quantité invalide pour le produit: ${item.productId}`);
+      }
 
-    const { error: itemsError } = await adminClient
+      return {
+        sale_id: newSale.id,
+        product_id: item.productId,
+        quantity: quantity,
+        unit_price: unitPrice, // Supabase accepte les nombres pour NUMERIC
+      };
+    });
+
+    console.log("Inserting sales_items:", JSON.stringify(salesItems, null, 2));
+
+    const { error: itemsError, data: insertedItems } = await adminClient
       .from("sales_items")
-      .insert(salesItems);
+      .insert(salesItems)
+      .select();
 
     if (itemsError) {
       // Supprimer la vente si les items n'ont pas pu être créés
       await adminClient.from("sales").delete().eq("id", newSale.id);
-      console.error(itemsError);
+      console.error("Error inserting sales_items:", itemsError);
+      console.error("Error details:", JSON.stringify(itemsError, null, 2));
       return {
         status: "error",
-        message: "Impossible d'ajouter les produits à la vente. Réessayez.",
+        message: `Impossible d'ajouter les produits à la vente: ${itemsError.message ?? "Erreur inconnue"}`,
       };
     }
+
+    console.log("Successfully inserted sales_items:", insertedItems);
 
     // Mettre à jour les stocks des produits
     for (const item of parsed.data.items) {
