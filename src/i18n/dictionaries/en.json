@@ -1,0 +1,424 @@
+{
+  "meta": {
+    "appName": "STOCKINO",
+    "tagline": "Universal stock management"
+  },
+  "layout": {
+    "auth": {
+      "title": "Welcome to STOCKINO",
+      "description": "A universal platform to monitor stock, sales and teams in real time.",
+      "content": "Manage any type of product, trigger alerts automatically and export reports in a few clicks.",
+      "footer": "All rights reserved."
+    }
+  },
+  "language": {
+    "label": "Language",
+    "fr": "French",
+    "en": "English",
+    "ar": "Arabic"
+  },
+  "auth": {
+    "signin": {
+      "title": "Sign in",
+      "description": "Access your inventory management workspace.",
+      "organizationCode": "Organization code",
+      "organizationCodeHint": "Ask your administrator for the code (optional for admins)",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "error": "Unable to sign in. Please check your credentials.",
+      "createAccount": "Create an account",
+      "forgotPassword": "Forgot password?",
+      "pending": "Signing in..."
+    },
+    "signup": {
+      "title": "Create an account",
+      "description": "Invite your team and start monitoring stock in minutes.",
+      "company": "Company",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create my account",
+      "existing": "Already registered?",
+      "existingLink": "Sign in",
+      "pending": "Creating account..."
+    },
+    "forgot": {
+      "title": "Reset password",
+      "description": "Enter your email to receive a secure reset link.",
+      "email": "Email",
+      "submit": "Send link",
+      "success": "Done! Check your inbox to complete the reset.",
+      "hint": "Remember your password?",
+      "back": "Back to sign in",
+      "pending": "Sending..."
+    }
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "sales": "Sales",
+    "movements": "Movements",
+    "reports": "Reports",
+    "users": "Users",
+    "settings": "Settings",
+    "quickAdd": "Add product"
+  },
+  "topbar": {
+    "searchPlaceholder": "Search product, customer, movement...",
+    "notifications": "Notifications",
+    "account": "My account",
+    "helpCenter": "Help center",
+    "signOut": "Sign out",
+    "theme": "Mode",
+    "themeDescription": "Light / dark",
+    "pendingSignOut": "Signing out...",
+    "settings": "Settings",
+    "noOrganization": "No organization"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Quick overview of your stock and sales.",
+    "noOrganization": {
+      "title": "Organization required",
+      "description": "You must create an organization to access the dashboard.",
+      "hint": "Create your organization in settings to see your statistics."
+    },
+    "loading": "Loading statistics...",
+    "stats": {
+      "activeProducts": "Active products",
+      "outOfStock": "Out of stock",
+      "totalStock": "Total stock",
+      "todaySales": "Today's sales",
+      "monthlySales": "Monthly sales",
+      "recentSales": "Recent sales",
+      "lowStockProducts": "Low stock products"
+    },
+    "noSales": "No sales recorded",
+    "noLowStock": "No low stock products"
+  },
+  "products": {
+    "title": "Products",
+    "description": "Manage your product catalog, stock levels and prices.",
+    "noOrganization": {
+      "title": "You don't have an organization yet",
+      "description": "Create your organization in settings to start adding products."
+    },
+    "add": "Add product",
+    "search": "Search for a product...",
+    "filters": {
+      "category": "Category",
+      "status": "Status",
+      "allCategories": "All categories",
+      "allStatuses": "All statuses",
+      "reset": "Reset"
+    },
+    "stats": {
+      "active": "Active products",
+      "totalStock": "Total stock"
+    },
+    "table": {
+      "product": "Product",
+      "category": "Category",
+      "stock": "Stock",
+      "price": "Price",
+      "status": "Status",
+      "actions": "Actions",
+      "noProducts": "No products found.",
+      "noProductsFiltered": "No products match the search criteria."
+    },
+    "status": {
+      "in_stock": "In stock",
+      "low_stock": "Low stock",
+      "out_of_stock": "Out of stock",
+      "archived": "Archived"
+    },
+    "dialog": {
+      "add": {
+        "title": "Add product",
+        "description": "Fill in the product information to add it to your catalog.",
+        "name": "Product name *",
+        "category": "Category",
+        "description": "Description",
+        "stock": "Initial stock *",
+        "price": "Unit price",
+        "status": "Status",
+        "image": "Product image",
+        "imageHint": "Accepted formats: JPG, PNG, WebP (max 5MB)",
+        "submit": "Add product",
+        "pending": "Adding...",
+        "cancel": "Cancel"
+      },
+      "edit": {
+        "title": "Edit product",
+        "description": "Update the product information.",
+        "submit": "Save changes",
+        "pending": "Saving..."
+      },
+      "delete": {
+        "title": "Delete product",
+        "description": "Are you sure you want to delete this product? This action is irreversible.",
+        "confirm": "Delete",
+        "cancel": "Cancel",
+        "pending": "Deleting..."
+      }
+    }
+  },
+  "sales": {
+    "title": "Sales",
+    "description": "Record your daily sales, view trends and prepare your reports.",
+    "noOrganization": {
+      "title": "You don't have an organization yet",
+      "description": "Create your organization in settings to start recording sales."
+    },
+    "add": "New sale",
+    "filters": {
+      "today": "Today",
+      "week": "Week",
+      "month": "Month"
+    },
+    "stats": {
+      "count": "Number of sales",
+      "total": "Total sales",
+      "average": "Average basket"
+    },
+    "search": "Search by date, amount, notes...",
+    "clear": "Clear",
+    "table": {
+      "date": "Date",
+      "amount": "Total amount",
+      "notes": "Notes",
+      "created": "Created on",
+      "actions": "Actions",
+      "noSales": "No sales recorded. Create your first sale.",
+      "noSalesFiltered": "No sales match the search criteria.",
+      "count": "sale found",
+      "countPlural": "sales found"
+    },
+    "dialog": {
+      "add": {
+        "title": "New sale",
+        "description": "Record a new sale. Stock will be automatically updated.",
+        "date": "Sale date",
+        "addProduct": "Add a product",
+        "selectProduct": "Select a product",
+        "noProducts": "No products in stock",
+        "products": "Sale products",
+        "product": "Product",
+        "quantity": "Quantity",
+        "unitPrice": "Unit price",
+        "subtotal": "Subtotal",
+        "max": "Max",
+        "total": "Total",
+        "notes": "Notes (optional)",
+        "notesPlaceholder": "Remarks on the sale...",
+        "submit": "Record sale",
+        "pending": "Recording...",
+        "cancel": "Cancel",
+        "error": "Add at least one product to the sale.",
+        "errorAlreadyInList": "This product is already in the list.",
+        "errorInsufficientStock": "Insufficient stock for this product."
+      },
+      "delete": {
+        "title": "Delete sale",
+        "description": "Are you sure you want to delete this sale? Stock will be restored.",
+        "confirm": "Delete",
+        "cancel": "Cancel",
+        "pending": "Deleting..."
+      }
+    }
+  },
+  "movements": {
+    "title": "Entry & exit receipts",
+    "description": "Track stock movements, generate PDFs and keep a complete history.",
+    "noOrganization": {
+      "title": "You don't have an organization yet",
+      "description": "Create your organization in settings to start creating receipts."
+    },
+    "add": "New receipt",
+    "search": "Search by reference, notes...",
+    "filters": {
+      "type": "Type",
+      "status": "Status",
+      "allTypes": "All types",
+      "allStatuses": "All statuses",
+      "entry": "Entry",
+      "exit": "Exit",
+      "reset": "Reset"
+    },
+    "table": {
+      "reference": "Reference",
+      "type": "Type",
+      "date": "Date",
+      "status": "Status",
+      "notes": "Notes",
+      "actions": "Actions",
+      "noReceipts": "No receipts recorded. Create your first receipt.",
+      "noReceiptsFiltered": "No receipts match the search criteria.",
+      "count": "receipt found",
+      "countPlural": "receipts found"
+    },
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "dialog": {
+      "add": {
+        "title": "New entry/exit receipt",
+        "description": "Create an entry receipt (goods reception) or exit receipt (stock withdrawal).",
+        "type": "Receipt type",
+        "typeEntry": "Entry (reception)",
+        "typeExit": "Exit (withdrawal)",
+        "date": "Receipt date",
+        "addProduct": "Add a product",
+        "selectProduct": "Select a product",
+        "noProductsStock": "No products in stock",
+        "noProductsAvailable": "No products available",
+        "products": "Receipt products",
+        "product": "Product",
+        "quantity": "Quantity",
+        "unitPrice": "Unit price",
+        "subtotal": "Subtotal",
+        "subtotalHT": "Subtotal ex. VAT",
+        "vat": "VAT",
+        "totalTTC": "Total incl. VAT",
+        "vatRate": "VAT rate (%)",
+        "generateInvoice": "Generate invoice",
+        "notes": "Notes (optional)",
+        "notesPlaceholder": "Remarks on the receipt...",
+        "submit": "Save receipt",
+        "pending": "Saving...",
+        "cancel": "Cancel",
+        "error": "Add at least one product to the receipt.",
+        "errorAlreadyInList": "This product is already in the list.",
+        "errorInsufficientStock": "Insufficient stock for this product.",
+        "errorStockAvailable": "Stock available"
+      },
+      "delete": {
+        "title": "Delete receipt",
+        "description": "Are you sure you want to delete this receipt? Stock will be restored.",
+        "confirm": "Delete",
+        "cancel": "Cancel",
+        "pending": "Deleting..."
+      }
+    },
+    "downloadPDF": "Download PDF",
+    "downloadInvoice": "Download invoice PDF"
+  },
+  "reports": {
+    "title": "Reports",
+    "description": "Generate and export your stock and sales reports.",
+    "stock": {
+      "title": "Stock report",
+      "description": "Export the complete state of your stock with all product information.",
+      "exportPDF": "Export as PDF",
+      "exportExcel": "Export as Excel"
+    },
+    "sales": {
+      "title": "Sales report",
+      "description": "Analyze your sales over a given period with detailed statistics.",
+      "period": "Period",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "exportPDF": "Export as PDF",
+      "exportExcel": "Export as Excel",
+      "generate": "Generate report"
+    }
+  },
+  "users": {
+    "title": "Users",
+    "description": "Manage your organization members and their permissions.",
+    "noOrganization": {
+      "title": "You don't have an organization yet",
+      "description": "Create your organization in settings to start managing users."
+    },
+    "noUsers": "No users found.",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "actions": "Actions",
+      "you": "You"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "manager": "Manager",
+      "operator": "Operator"
+    },
+    "dialog": {
+      "add": {
+        "title": "Create user",
+        "description": "Create an account for a collaborator with an email and password.",
+        "fullName": "Full name",
+        "email": "Login email *",
+        "password": "Password *",
+        "passwordHint": "Minimum 6 characters",
+        "role": "Role *",
+        "selectRole": "Choose a role",
+        "submit": "Create user",
+        "pending": "Creating..."
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Configure your organization and manage your team members.",
+    "organization": {
+      "title": "Organization",
+      "description": "Update your organization information.",
+      "descriptionCreate": "Create your organization to start managing your stock.",
+      "name": "Organization name *",
+      "namePlaceholder": "Ex. Delights Shop",
+      "contactEmail": "Contact email",
+      "contactEmailPlaceholder": "contact@your-company.com",
+      "code": "Organization code",
+      "codeHint": "Share this code with your collaborators so they can log in.",
+      "role": "Current role",
+      "submit": "Save",
+      "createHint": "When created, you automatically become administrator of this organization.",
+      "successCreate": "Organization created successfully. Organization code: {code}. Page will reload...",
+      "successUpdate": "Organization updated successfully."
+    },
+    "team": {
+      "title": "Team",
+      "description": "Manage your organization members and their roles.",
+      "code": "Organization code",
+      "codeHint": "Share this code with your collaborators so they can log in.",
+      "noMembers": "No members yet.",
+      "addUser": "Add user",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "actions": "Actions",
+        "you": "You"
+      }
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "pending": "Pending...",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "export": "Export",
+    "download": "Download",
+    "actions": "Actions",
+    "date": "Date",
+    "total": "Total",
+    "subtotal": "Sous-total",
+    "quantity": "Quantity",
+    "price": "Price",
+    "status": "Status",
+    "notes": "Notes",
+    "optional": "optional"
+  }
+}

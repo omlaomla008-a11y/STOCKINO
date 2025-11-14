@@ -1,0 +1,424 @@
+{
+  "meta": {
+    "appName": "STOCKINO",
+    "tagline": "Gestion de stock universelle"
+  },
+  "layout": {
+    "auth": {
+      "title": "Bienvenue sur STOCKINO",
+      "description": "Une plateforme universelle pour suivre vos stocks, vos ventes et vos équipes en temps réel.",
+      "content": "Gérez n'importe quel type de produit, déclenchez des alertes automatiques et exportez vos rapports en quelques clics.",
+      "footer": "Tous droits réservés."
+    }
+  },
+  "language": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "Anglais",
+    "ar": "Arabe"
+  },
+  "auth": {
+    "signin": {
+      "title": "Connexion",
+      "description": "Accédez à votre espace de gestion de stock.",
+      "organizationCode": "Code d'organisation",
+      "organizationCodeHint": "Demandez le code à votre administrateur (optionnel pour les admins)",
+      "email": "Email",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "error": "Connexion impossible. Vérifiez vos identifiants.",
+      "createAccount": "Créer un compte",
+      "forgotPassword": "Mot de passe oublié ?",
+      "pending": "Connexion en cours"
+    },
+    "signup": {
+      "title": "Créer un compte",
+      "description": "Invitez votre équipe et commencez à piloter vos stocks en quelques minutes.",
+      "company": "Entreprise",
+      "email": "Email",
+      "password": "Mot de passe",
+      "submit": "Créer mon compte",
+      "existing": "Déjà inscrit ?",
+      "existingLink": "Se connecter",
+      "pending": "Création en cours"
+    },
+    "forgot": {
+      "title": "Réinitialiser le mot de passe",
+      "description": "Entrez votre email pour recevoir un lien sécurisé de réinitialisation.",
+      "email": "Email",
+      "submit": "Envoyer le lien",
+      "success": "C'est fait ! Vérifiez votre boîte mail pour finaliser la réinitialisation.",
+      "hint": "Souvenez-vous de votre mot de passe ?",
+      "back": "Retour à la connexion",
+      "pending": "Envoi en cours"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Accueil",
+    "products": "Produits",
+    "sales": "Ventes",
+    "movements": "Bons",
+    "reports": "Rapports",
+    "users": "Utilisateurs",
+    "settings": "Paramètres",
+    "quickAdd": "Ajouter un produit"
+  },
+  "topbar": {
+    "searchPlaceholder": "Rechercher un produit, un client, un mouvement...",
+    "notifications": "Notifications",
+    "account": "Mon compte",
+    "helpCenter": "Centre d'aide",
+    "signOut": "Se déconnecter",
+    "theme": "Mode",
+    "themeDescription": "Clair / sombre",
+    "pendingSignOut": "Déconnexion...",
+    "settings": "Paramètres",
+    "noOrganization": "Sans organisation"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "description": "Aperçu rapide de vos stocks et de vos ventes.",
+    "noOrganization": {
+      "title": "Organisation requise",
+      "description": "Vous devez créer une organisation pour accéder au tableau de bord.",
+      "hint": "Créez votre organisation dans les paramètres pour voir vos statistiques."
+    },
+    "loading": "Chargement des statistiques...",
+    "stats": {
+      "activeProducts": "Produits actifs",
+      "outOfStock": "Ruptures de stock",
+      "totalStock": "Stock total",
+      "todaySales": "Ventes du jour",
+      "monthlySales": "Ventes du mois",
+      "recentSales": "Ventes récentes",
+      "lowStockProducts": "Produits en alerte"
+    },
+    "noSales": "Aucune vente enregistrée",
+    "noLowStock": "Aucun produit en alerte"
+  },
+  "products": {
+    "title": "Produits",
+    "description": "Gérez votre catalogue de produits, leurs stocks et leurs prix.",
+    "noOrganization": {
+      "title": "Vous n'avez pas encore d'organisation",
+      "description": "Créez votre organisation dans les paramètres pour commencer à ajouter des produits."
+    },
+    "add": "Ajouter un produit",
+    "search": "Rechercher un produit...",
+    "filters": {
+      "category": "Catégorie",
+      "status": "Statut",
+      "allCategories": "Toutes les catégories",
+      "allStatuses": "Tous les statuts",
+      "reset": "Réinitialiser"
+    },
+    "stats": {
+      "active": "Produits actifs",
+      "totalStock": "Stock total"
+    },
+    "table": {
+      "product": "Produit",
+      "category": "Catégorie",
+      "stock": "Stock",
+      "price": "Prix",
+      "status": "Statut",
+      "actions": "Actions",
+      "noProducts": "Aucun produit trouvé.",
+      "noProductsFiltered": "Aucun produit ne correspond aux critères de recherche."
+    },
+    "status": {
+      "in_stock": "En stock",
+      "low_stock": "Seuil d'alerte",
+      "out_of_stock": "Rupture",
+      "archived": "Archivé"
+    },
+    "dialog": {
+      "add": {
+        "title": "Ajouter un produit",
+        "description": "Remplissez les informations du produit pour l'ajouter à votre catalogue.",
+        "name": "Nom du produit *",
+        "category": "Catégorie",
+        "description": "Description",
+        "stock": "Stock initial *",
+        "price": "Prix unitaire",
+        "status": "Statut",
+        "image": "Image du produit",
+        "imageHint": "Formats acceptés : JPG, PNG, WebP (max 5MB)",
+        "submit": "Ajouter le produit",
+        "pending": "Ajout en cours...",
+        "cancel": "Annuler"
+      },
+      "edit": {
+        "title": "Modifier le produit",
+        "description": "Mettez à jour les informations du produit.",
+        "submit": "Enregistrer les modifications",
+        "pending": "Enregistrement..."
+      },
+      "delete": {
+        "title": "Supprimer le produit",
+        "description": "Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler",
+        "pending": "Suppression..."
+      }
+    }
+  },
+  "sales": {
+    "title": "Ventes",
+    "description": "Enregistrez vos ventes quotidiennes, visualisez les tendances et préparez vos rapports.",
+    "noOrganization": {
+      "title": "Vous n'avez pas encore d'organisation",
+      "description": "Créez votre organisation dans les paramètres pour commencer à enregistrer des ventes."
+    },
+    "add": "Nouvelle vente",
+    "filters": {
+      "today": "Aujourd'hui",
+      "week": "Semaine",
+      "month": "Mois"
+    },
+    "stats": {
+      "count": "Nombre de ventes",
+      "total": "Total des ventes",
+      "average": "Panier moyen"
+    },
+    "search": "Rechercher par date, montant, notes...",
+    "clear": "Effacer",
+    "table": {
+      "date": "Date",
+      "amount": "Montant total",
+      "notes": "Notes",
+      "created": "Créée le",
+      "actions": "Actions",
+      "noSales": "Aucune vente enregistrée. Créez votre première vente.",
+      "noSalesFiltered": "Aucune vente ne correspond aux critères de recherche.",
+      "count": "vente trouvée",
+      "countPlural": "ventes trouvées"
+    },
+    "dialog": {
+      "add": {
+        "title": "Nouvelle vente",
+        "description": "Enregistrez une nouvelle vente. Les stocks seront automatiquement mis à jour.",
+        "date": "Date de vente",
+        "addProduct": "Ajouter un produit",
+        "selectProduct": "Sélectionner un produit",
+        "noProducts": "Aucun produit en stock",
+        "products": "Produits de la vente",
+        "product": "Produit",
+        "quantity": "Quantité",
+        "unitPrice": "Prix unitaire",
+        "subtotal": "Sous-total",
+        "max": "Max",
+        "total": "Total",
+        "notes": "Notes (optionnel)",
+        "notesPlaceholder": "Remarques sur la vente...",
+        "submit": "Enregistrer la vente",
+        "pending": "Enregistrement...",
+        "cancel": "Annuler",
+        "error": "Ajoutez au moins un produit à la vente.",
+        "errorAlreadyInList": "Ce produit est déjà dans la liste.",
+        "errorInsufficientStock": "Stock insuffisant pour ce produit."
+      },
+      "delete": {
+        "title": "Supprimer la vente",
+        "description": "Êtes-vous sûr de vouloir supprimer cette vente ? Le stock sera restauré.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler",
+        "pending": "Suppression..."
+      }
+    }
+  },
+  "movements": {
+    "title": "Bons d'entrée & sortie",
+    "description": "Suivez les mouvements de stock, générez des PDF et gardez un historique complet.",
+    "noOrganization": {
+      "title": "Vous n'avez pas encore d'organisation",
+      "description": "Créez votre organisation dans les paramètres pour commencer à créer des bons."
+    },
+    "add": "Nouveau bon",
+    "search": "Rechercher par référence, notes...",
+    "filters": {
+      "type": "Type",
+      "status": "Statut",
+      "allTypes": "Tous les types",
+      "allStatuses": "Tous les statuts",
+      "entry": "Entrée",
+      "exit": "Sortie",
+      "reset": "Réinitialiser"
+    },
+    "table": {
+      "reference": "Référence",
+      "type": "Type",
+      "date": "Date",
+      "status": "Statut",
+      "notes": "Notes",
+      "actions": "Actions",
+      "noReceipts": "Aucun bon enregistré. Créez votre premier bon.",
+      "noReceiptsFiltered": "Aucun bon ne correspond aux critères de recherche.",
+      "count": "bon trouvé",
+      "countPlural": "bons trouvés"
+    },
+    "status": {
+      "completed": "Complété",
+      "pending": "En attente",
+      "cancelled": "Annulé"
+    },
+    "dialog": {
+      "add": {
+        "title": "Nouveau bon d'entrée/sortie",
+        "description": "Créez un bon d'entrée (réception de marchandises) ou de sortie (retrait de stock).",
+        "type": "Type de bon",
+        "typeEntry": "Entrée (réception)",
+        "typeExit": "Sortie (retrait)",
+        "date": "Date du bon",
+        "addProduct": "Ajouter un produit",
+        "selectProduct": "Sélectionner un produit",
+        "noProductsStock": "Aucun produit en stock",
+        "noProductsAvailable": "Aucun produit disponible",
+        "products": "Produits du bon",
+        "product": "Produit",
+        "quantity": "Quantité",
+        "unitPrice": "Prix unitaire",
+        "subtotal": "Sous-total",
+        "subtotalHT": "Sous-total HT",
+        "vat": "TVA",
+        "totalTTC": "Total TTC",
+        "vatRate": "Taux de TVA (%)",
+        "generateInvoice": "Générer une facture",
+        "notes": "Notes (optionnel)",
+        "notesPlaceholder": "Remarques sur le bon...",
+        "submit": "Enregistrer le bon",
+        "pending": "Enregistrement...",
+        "cancel": "Annuler",
+        "error": "Ajoutez au moins un produit au bon.",
+        "errorAlreadyInList": "Ce produit est déjà dans la liste.",
+        "errorInsufficientStock": "Stock insuffisant pour ce produit.",
+        "errorStockAvailable": "Stock disponible"
+      },
+      "delete": {
+        "title": "Supprimer le bon",
+        "description": "Êtes-vous sûr de vouloir supprimer ce bon ? Le stock sera restauré.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler",
+        "pending": "Suppression..."
+      }
+    },
+    "downloadPDF": "Télécharger le PDF",
+    "downloadInvoice": "Télécharger la facture PDF"
+  },
+  "reports": {
+    "title": "Rapports",
+    "description": "Générez et exportez vos rapports de stock et de ventes.",
+    "stock": {
+      "title": "Rapport de stock",
+      "description": "Exportez l'état complet de votre stock avec toutes les informations des produits.",
+      "exportPDF": "Exporter en PDF",
+      "exportExcel": "Exporter en Excel"
+    },
+    "sales": {
+      "title": "Rapport de ventes",
+      "description": "Analysez vos ventes sur une période donnée avec des statistiques détaillées.",
+      "period": "Période",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "exportPDF": "Exporter en PDF",
+      "exportExcel": "Exporter en Excel",
+      "generate": "Générer le rapport"
+    }
+  },
+  "users": {
+    "title": "Utilisateurs",
+    "description": "Gérez les membres de votre organisation et leurs permissions.",
+    "noOrganization": {
+      "title": "Vous n'avez pas encore d'organisation",
+      "description": "Créez votre organisation dans les paramètres pour commencer à gérer les utilisateurs."
+    },
+    "noUsers": "Aucun utilisateur trouvé.",
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle",
+      "actions": "Actions",
+      "you": "Vous"
+    },
+    "roles": {
+      "admin": "Administrateur",
+      "manager": "Manager",
+      "operator": "Opérateur"
+    },
+    "dialog": {
+      "add": {
+        "title": "Créer un utilisateur",
+        "description": "Créez un compte pour un collaborateur avec un email et un mot de passe.",
+        "fullName": "Nom complet",
+        "email": "Email de connexion *",
+        "password": "Mot de passe *",
+        "passwordHint": "Minimum 6 caractères",
+        "role": "Rôle *",
+        "selectRole": "Choisir un rôle",
+        "submit": "Créer l'utilisateur",
+        "pending": "Création..."
+      }
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Configurez votre organisation et gérez les membres de votre équipe.",
+    "organization": {
+      "title": "Organisation",
+      "description": "Modifiez les informations de votre organisation.",
+      "descriptionCreate": "Créez votre organisation pour commencer à gérer vos stocks.",
+      "name": "Nom de l'organisation *",
+      "namePlaceholder": "Ex. Boutique Les Délices",
+      "contactEmail": "Email de contact",
+      "contactEmailPlaceholder": "contact@votre-entreprise.com",
+      "code": "Code d'organisation",
+      "codeHint": "Partagez ce code avec vos collaborateurs pour qu'ils puissent se connecter.",
+      "role": "Rôle actuel",
+      "submit": "Enregistrer",
+      "createHint": "Lors de la création, vous devenez automatiquement administrateur de cette organisation.",
+      "successCreate": "Organisation créée avec succès. Code d'organisation : {code}. La page va se recharger...",
+      "successUpdate": "Organisation mise à jour avec succès."
+    },
+    "team": {
+      "title": "Équipe",
+      "description": "Gérez les membres de votre organisation et leurs rôles.",
+      "code": "Code d'organisation",
+      "codeHint": "Partagez ce code avec vos collaborateurs pour qu'ils puissent se connecter.",
+      "noMembers": "Aucun membre pour l'instant.",
+      "addUser": "Ajouter un utilisateur",
+      "table": {
+        "name": "Nom",
+        "email": "Email",
+        "role": "Rôle",
+        "actions": "Actions",
+        "you": "Vous"
+      }
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "pending": "En cours...",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "yes": "Oui",
+    "no": "Non",
+    "confirm": "Confirmer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "reset": "Réinitialiser",
+    "export": "Exporter",
+    "download": "Télécharger",
+    "actions": "Actions",
+    "date": "Date",
+    "total": "Total",
+    "subtotal": "Sous-total",
+    "quantity": "Quantité",
+    "price": "Prix",
+    "status": "Statut",
+    "notes": "Notes",
+    "optional": "optionnel"
+  }
+}
