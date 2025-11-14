@@ -276,6 +276,18 @@ export function ProductsClient({ organizationId, initialProducts }: ProductsClie
                               alt={product.name}
                               fill
                               className="object-cover"
+                              unoptimized={product.image_url.includes("supabase.co")}
+                              onError={(e) => {
+                                // Si l'image ne charge pas, afficher le placeholder
+                                e.currentTarget.style.display = "none";
+                                const parent = e.currentTarget.parentElement;
+                                if (parent && !parent.querySelector("span")) {
+                                  const placeholder = document.createElement("span");
+                                  placeholder.className = "flex h-full w-full items-center justify-center text-xs text-muted-foreground";
+                                  placeholder.textContent = product.name.slice(0, 2).toUpperCase();
+                                  parent.appendChild(placeholder);
+                                }
+                              }}
                             />
                           ) : (
                             <span className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">

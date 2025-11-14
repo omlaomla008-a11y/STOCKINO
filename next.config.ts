@@ -12,6 +12,16 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+  // Configuration des images pour autoriser Supabase Storage
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
+  },
   // Désactiver ESLint pendant le build pour Netlify
   eslint: {
     ignoreDuringBuilds: true,
