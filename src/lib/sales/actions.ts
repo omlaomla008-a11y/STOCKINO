@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireUser } from "@/lib/auth/session";
-import { createSupabaseServerClient } from "@/lib/supabase/server-client";
+import { getSupabaseAdminClient } from "@/lib/supabase/admin-client";
 
 const saleItemSchema = z.object({
   productId: z.string().uuid(),
@@ -54,13 +54,14 @@ export async function createSaleAction(
     };
   }
 
-  const supabase = await createSupabaseServerClient();
+  const adminClient = getSupabaseAdminClient();
 
-  const { data: profile, error: profileError } = await supabase
+  // Utiliser le client admin pour bypasser RLS
+  const { data: profile, error: profileError } = await adminClient
     .from("profiles")
     .select("organization_id")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
   if (profileError || !profile?.organization_id) {
     return {
@@ -78,7 +79,7 @@ export async function createSaleAction(
 
   // Vérifier que tous les produits existent et appartiennent à l'organisation
   const productIds = parsed.data.items.map((item) => item.productId);
-  const { data: products, error: productsError } = await supabase
+  const { data: products, error: productsError } = await adminClient
     .from("products")
     .select("id, quantity, price")
     .in("id", productIds)
@@ -110,7 +111,7 @@ export async function createSaleAction(
 
   try {
     // Créer la vente
-    const { data: newSale, error: saleError } = await supabase
+    const { data: newSale, error: saleError } = await adminClient
       .from("sales")
       .insert({
         organization_id: parsed.data.organizationId,
@@ -138,13 +139,13 @@ export async function createSaleAction(
       unit_price: item.unitPrice,
     }));
 
-    const { error: itemsError } = await supabase
+    const { error: itemsError } = await adminClient
       .from("sales_items")
       .insert(salesItems);
 
     if (itemsError) {
       // Supprimer la vente si les items n'ont pas pu être créés
-      await supabase.from("sales").delete().eq("id", newSale.id);
+      await adminClient.from("sales").delete().eq("id", newSale.id);
       console.error(itemsError);
       return {
         status: "error",
@@ -164,7 +165,7 @@ export async function createSaleAction(
               ? "low_stock"
               : "in_stock";
 
-        await supabase
+        await adminClient
           .from("products")
           .update({
             quantity: newQuantity,
@@ -175,7 +176,7 @@ export async function createSaleAction(
     }
 
     // Récupérer la vente avec le total calculé
-    const { data: saleWithTotal, error: fetchError } = await supabase
+    const { data: saleWithTotal, error: fetchError } = await adminClient
       .from("sales")
       .select("*")
       .eq("id", newSale.id)
@@ -232,13 +233,14 @@ export async function deleteSaleAction(
     };
   }
 
-  const supabase = await createSupabaseServerClient();
+  const adminClient = getSupabaseAdminClient();
 
-  const { data: profile, error: profileError } = await supabase
+  // Utiliser le client admin pour bypasser RLS
+  const { data: profile, error: profileError } = await adminClient
     .from("profiles")
     .select("organization_id")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
   if (profileError || !profile?.organization_id) {
     return {
@@ -248,7 +250,7 @@ export async function deleteSaleAction(
   }
 
   // Récupérer la vente et ses items
-  const { data: sale, error: saleError } = await supabase
+  const { data: sale, error: saleError } = await adminClient
     .from("sales")
     .select("id, organization_id")
     .eq("id", parsed.data.saleId)
@@ -269,7 +271,7 @@ export async function deleteSaleAction(
   }
 
   // Récupérer les items pour restaurer les stocks
-  const { data: items, error: itemsError } = await supabase
+  const { data: items, error: itemsError } = await adminClient
     .from("sales_items")
     .select("product_id, quantity")
     .eq("sale_id", parsed.data.saleId);
@@ -281,7 +283,7 @@ export async function deleteSaleAction(
   // Restaurer les stocks si des items existent
   if (items && items.length > 0) {
     for (const item of items) {
-      const { data: product } = await supabase
+      const { data: product } = await adminClient
         .from("products")
         .select("quantity, status")
         .eq("id", item.product_id)
@@ -296,7 +298,7 @@ export async function deleteSaleAction(
               ? "low_stock"
               : "in_stock";
 
-        await supabase
+        await adminClient
           .from("products")
           .update({
             quantity: newQuantity,
@@ -308,7 +310,7 @@ export async function deleteSaleAction(
   }
 
   // Supprimer la vente (les items seront supprimés automatiquement par CASCADE)
-  const { error: deleteError } = await supabase
+  const { error: deleteError } = await adminClient
     .from("sales")
     .delete()
     .eq("id", parsed.data.saleId);

@@ -37,9 +37,9 @@ export async function uploadProductImageAction(
     };
   }
 
-  // Convertir File en ArrayBuffer puis en Blob
+  // Convertir File en Buffer pour Node.js
   const arrayBuffer = await file.arrayBuffer();
-  const blob = new Blob([arrayBuffer], { type: file.type });
+  const buffer = Buffer.from(arrayBuffer);
   const sanitizedName = file.name.replace(/\s+/g, "-").toLowerCase();
   const path = `${organizationId}/${Date.now()}-${sanitizedName}`;
 
@@ -50,20 +50,23 @@ export async function uploadProductImageAction(
 
     const { error: uploadError } = await adminClient.storage
       .from("product-images")
-      .upload(path, blob, {
+      .upload(path, buffer, {
         cacheControl: "3600",
         upsert: true,
         contentType: file.type,
+        duplex: "half",
       });
 
     if (uploadError) {
       console.error("Erreur upload:", uploadError);
+      console.error("Détails:", JSON.stringify(uploadError, null, 2));
       
       // Si le bucket n'existe pas, donner un message clair
       if (
         uploadError.message?.includes("Bucket not found") ||
         uploadError.message?.includes("does not exist") ||
-        uploadError.message?.includes("Bucket")
+        uploadError.message?.includes("Bucket") ||
+        uploadError.statusCode === 404
       ) {
         return {
           status: "error",
@@ -71,9 +74,21 @@ export async function uploadProductImageAction(
         };
       }
 
+      // Vérifier si c'est une erreur de permission
+      if (
+        uploadError.message?.includes("permission") ||
+        uploadError.message?.includes("policy") ||
+        uploadError.statusCode === 403
+      ) {
+        return {
+          status: "error",
+          message: "Erreur de permissions. Vérifiez que le bucket est public ou que les politiques RLS sont correctement configurées.",
+        };
+      }
+
       return {
         status: "error",
-        message: `Impossible de téléverser l'image: ${uploadError.message ?? "Erreur inconnue"}`,
+        message: `Impossible de téléverser l'image: ${uploadError.message ?? "Erreur inconnue"} (Code: ${uploadError.statusCode ?? "N/A"})`,
       };
     }
 
