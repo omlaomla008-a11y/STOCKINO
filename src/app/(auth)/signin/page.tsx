@@ -38,7 +38,7 @@ export default function SignInPage() {
       <CardContent>
         <form action={formAction} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="organizationCode">Code d'organisation</Label>
+            <Label htmlFor="organizationCode">{t("organizationCode")}</Label>
             <Input
               id="organizationCode"
               name="organizationCode"
@@ -48,7 +48,7 @@ export default function SignInPage() {
               style={{ textTransform: "uppercase" }}
             />
             <p className="text-xs text-muted-foreground">
-              Demandez le code à votre administrateur (optionnel pour les admins)
+              {t("organizationCodeHint")}
             </p>
           </div>
           <div className="space-y-2">

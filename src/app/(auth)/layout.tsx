@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Logo } from "@/components/common/logo";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import {
   Card,
   CardContent,
@@ -29,7 +30,10 @@ export default async function AuthLayout({
   return (
     <div className="flex min-h-screen flex-col bg-muted/30 lg:flex-row">
       <aside className="flex flex-1 flex-col justify-between bg-gradient-to-br from-primary/10 via-background to-background px-8 py-10">
-        <Logo />
+        <div className="flex items-start justify-between">
+          <Logo />
+          <LanguageSwitcher />
+        </div>
         <div className="space-y-4">
           <Card className="border-none bg-background/60 shadow-lg backdrop-blur">
             <CardHeader>

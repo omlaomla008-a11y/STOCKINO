@@ -76,7 +76,9 @@ export async function signInAction(
   const providedCode = parsed.data.organizationCode?.trim().toUpperCase();
   const profileOrgId = profile?.organization_id ?? null;
   const profileRole = (profile?.role as string | undefined) ?? null;
-  const profileOrgCode = profile?.organization?.code ?? null;
+
+  // Si le profil n'existe pas OU n'a pas d'organisation_id, permettre la connexion (première connexion d'un admin)
+  const isFirstLogin = !profile || !profileOrgId;
 
   // Si un code est fourni, vérifier qu'il correspond à l'organisation de l'utilisateur
   if (providedCode) {
@@ -94,10 +96,11 @@ export async function signInAction(
       };
     }
 
-    // Pour les admins, permettre la connexion même si le code ne correspond pas
+    // Pour les admins ou première connexion, permettre la connexion même si le code ne correspond pas
     // Pour les autres utilisateurs, vérifier que le code correspond à leur organisation
     if (
       profileRole !== "admin" &&
+      !isFirstLogin &&
       profileOrgId &&
       profileOrgId !== organization.id
     ) {
@@ -108,10 +111,12 @@ export async function signInAction(
       };
     }
   } else {
-    // Si pas de code fourni, seuls les admins peuvent se connecter
-    // Si le profil n'existe pas encore, permettre la connexion (première connexion)
-    if (!profile) {
-      // Pas de profil = première connexion, on permet
+    // Si pas de code fourni :
+    // - Permettre la connexion si c'est la première connexion (pas de profil ou pas d'organisation)
+    // - Permettre la connexion si l'utilisateur est admin (même s'il a une organisation)
+    // - Sinon, demander le code d'organisation
+    if (isFirstLogin || profileRole === "admin") {
+      // Première connexion ou admin = connexion autorisée
       revalidatePath("/dashboard");
       redirect("/dashboard");
       return {
@@ -120,13 +125,12 @@ export async function signInAction(
       };
     }
 
-    if (profileRole !== "admin") {
-      await supabase.auth.signOut();
-      return {
-        message: "Veuillez indiquer le code d'organisation pour vous connecter.",
-        status: "error",
-      };
-    }
+    // Si le profil existe, a une organisation, et n'est pas admin, demander le code
+    await supabase.auth.signOut();
+    return {
+      message: "Veuillez indiquer le code d'organisation pour vous connecter.",
+      status: "error",
+    };
   }
 
   revalidatePath("/dashboard");
