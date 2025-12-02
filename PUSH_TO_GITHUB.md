@@ -29,3 +29,4 @@ GitHub n'accepte plus les mots de passe. Tu dois utiliser un **Personal Access T
 6. **COPIE LE TOKEN** (tu ne pourras plus le voir après)
 7. Utilise ce token comme mot de passe quand Git te le demande
 
+

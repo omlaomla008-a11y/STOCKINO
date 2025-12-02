@@ -37,3 +37,4 @@ Après avoir créé le bucket, testez l'ajout d'un produit avec une image. Cela 
 
 Les images sont organisées par organisation : `{organization_id}/{timestamp}-{filename}`
 
+

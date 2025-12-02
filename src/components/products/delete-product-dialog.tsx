@@ -99,3 +99,4 @@ export function DeleteProductDialog({ product, onProductDeleted }: DeleteProduct
   );
 }
 
+

@@ -79,3 +79,4 @@ Après avoir appliqué une des solutions ci-dessus :
 2. Essaie d'ajouter un produit avec une image
 3. Vérifie les logs du serveur pour voir l'erreur exacte
 
+

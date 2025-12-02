@@ -38,3 +38,4 @@ Pour activer le module de gestion des bons d'entrée/sortie, vous devez exécute
 
 Une fois le script exécuté, vous pouvez utiliser le module Mouvements dans l'application. Les bons seront automatiquement liés à votre organisation et les stocks seront mis à jour en temps réel.
 
+

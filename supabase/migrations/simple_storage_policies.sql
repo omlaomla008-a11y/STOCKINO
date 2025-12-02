@@ -39,3 +39,4 @@ FOR UPDATE
 TO authenticated
 USING (bucket_id = 'product-images');
 
+

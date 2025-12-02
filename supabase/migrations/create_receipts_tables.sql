@@ -245,3 +245,4 @@ CREATE POLICY "Users can delete receipt_items from their organization"
     )
   );
 
+

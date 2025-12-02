@@ -156,3 +156,4 @@ CREATE POLICY "Users can delete sales_items from their organization"
     )
   );
 
+

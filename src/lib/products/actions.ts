@@ -175,6 +175,9 @@ export async function createProductAction(input: CreateProductInput): Promise<Cr
     };
   }
 
+  // Déterminer le statut automatiquement : si stock = 0, statut = "out_of_stock"
+  const finalStatus = parsed.data.stock === 0 ? "out_of_stock" : parsed.data.status;
+
   // Utiliser le client admin pour l'insertion
   const { data, error } = await adminClient
     .from("products")
@@ -183,7 +186,7 @@ export async function createProductAction(input: CreateProductInput): Promise<Cr
       name: parsed.data.name,
       category: parsed.data.category ?? null,
       description: parsed.data.description ?? null,
-      status: parsed.data.status,
+      status: finalStatus,
       quantity: parsed.data.stock,
       price: parsed.data.price ?? null,
       image_url: parsed.data.imageUrl ?? null,
@@ -293,6 +296,12 @@ export async function updateProductAction(
     };
   }
 
+  // Déterminer le statut automatiquement : si stock = 0, statut = "out_of_stock"
+  // Si le statut est "archived", on le garde tel quel
+  const finalStatus = parsed.data.stock === 0 && parsed.data.status !== "archived" 
+    ? "out_of_stock" 
+    : parsed.data.status;
+
   // Utiliser le client admin pour la mise à jour
   const { data, error } = await adminClient
     .from("products")
@@ -300,7 +309,7 @@ export async function updateProductAction(
       name: parsed.data.name.trim(),
       category: parsed.data.category?.trim() || null,
       description: parsed.data.description?.trim() || null,
-      status: parsed.data.status,
+      status: finalStatus,
       quantity: parsed.data.stock,
       price: parsed.data.price ?? null,
       image_url: parsed.data.imageUrl ?? null,

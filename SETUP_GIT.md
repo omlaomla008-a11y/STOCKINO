@@ -78,3 +78,4 @@ Avant de cliquer sur "Deploy site", assurez-vous d'ajouter les variables d'envir
 6. Ajoutez les variables d'environnement
 7. Cliquez sur "Deploy site"
 
+

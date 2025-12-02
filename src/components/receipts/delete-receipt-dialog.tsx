@@ -112,3 +112,4 @@ export function DeleteReceiptDialog({ receipt, onReceiptDeleted }: DeleteReceipt
   );
 }
 
+

@@ -231,7 +231,7 @@ export function CreateSaleDialog({
                 <SelectTrigger className="flex-1">
                   <SelectValue placeholder={t("selectProduct")} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-[400px] overflow-y-auto">
                   {availableProducts.length === 0 ? (
                     <div className="px-2 py-1.5 text-sm text-muted-foreground">
                       {t("noProducts")}

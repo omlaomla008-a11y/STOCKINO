@@ -27,3 +27,4 @@ Pour activer le module de gestion des ventes, vous devez exécuter le script SQL
 
 Une fois le script exécuté, vous pouvez utiliser le module Ventes dans l'application. Les ventes seront automatiquement liées à votre organisation et les stocks seront mis à jour en temps réel.
 
+
