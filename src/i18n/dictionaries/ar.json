@@ -51,6 +51,22 @@
       "hint": "تتذكر كلمة المرور؟",
       "back": "العودة إلى تسجيل الدخول",
       "pending": "جاري الإرسال..."
+    },
+    "reset": {
+      "title": "تعيين كلمة مرور جديدة",
+      "description": "اختر كلمة مرور آمنة لحسابك.",
+      "newPassword": "كلمة المرور الجديدة",
+      "passwordPlaceholder": "6 أحرف على الأقل",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "كرر كلمة المرور",
+      "submit": "تحديث كلمة المرور",
+      "updating": "جاري التحديث...",
+      "successTitle": "تم تحديث كلمة المرور",
+      "successDescription": "تم تحديث كلمة المرور بنجاح.",
+      "goToSignIn": "الذهاب إلى تسجيل الدخول",
+      "invalidTitle": "رابط غير صالح",
+      "invalidDescription": "رابط إعادة التعيين غير صالح أو منتهي الصلاحية.",
+      "requestNewLink": "طلب رابط جديد"
     }
   },
   "sidebar": {

@@ -43,3 +43,4 @@ UPDATE public.products
 SET status = 'out_of_stock'
 WHERE quantity = 0 AND status != 'out_of_stock' AND status != 'archived';
 
+

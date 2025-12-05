@@ -51,6 +51,22 @@
       "hint": "Remember your password?",
       "back": "Back to sign in",
       "pending": "Sending..."
+    },
+    "reset": {
+      "title": "Set New Password",
+      "description": "Choose a secure password for your account.",
+      "newPassword": "New Password",
+      "passwordPlaceholder": "At least 6 characters",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Repeat password",
+      "submit": "Update Password",
+      "updating": "Updating...",
+      "successTitle": "Password Updated",
+      "successDescription": "Your password has been successfully updated.",
+      "goToSignIn": "Go to Sign In",
+      "invalidTitle": "Invalid Link",
+      "invalidDescription": "The reset link is invalid or has expired.",
+      "requestNewLink": "Request New Link"
     }
   },
   "sidebar": {

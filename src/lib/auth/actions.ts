@@ -220,3 +220,73 @@ export async function signOutAction() {
   revalidatePath("/signin");
   revalidatePath("/dashboard");
 }
+
+// Action admin pour générer un lien de réinitialisation de mot de passe
+const AdminResetPasswordSchema = z.object({
+  email: z.string().email("Adresse email invalide"),
+});
+
+export async function adminResetPasswordAction(
+  _prevState: AuthFormState | undefined,
+  formData: FormData,
+): Promise<AuthFormState & { resetLink?: string }> {
+  const parsed = AdminResetPasswordSchema.safeParse({
+    email: formData.get("email"),
+  });
+
+  if (!parsed.success) {
+    return {
+      message: parsed.error.issues[0]?.message ?? "Adresse email invalide.",
+      status: "error",
+    };
+  }
+
+  const adminClient = getSupabaseAdminClient();
+
+  // Récupérer l'utilisateur par email
+  const { data: users, error: listError } = await adminClient.auth.admin.listUsers();
+  
+  if (listError) {
+    return {
+      message: "Impossible de récupérer les utilisateurs.",
+      status: "error",
+    };
+  }
+
+  const user = users.users.find((u) => u.email === parsed.data.email);
+
+  if (!user) {
+    return {
+      message: "Aucun utilisateur trouvé avec cet email.",
+      status: "error",
+    };
+  }
+
+  // Générer un lien de réinitialisation avec l'URL de redirection correcte
+  const redirectUrl = process.env.NEXT_PUBLIC_SITE_URL 
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`
+    : process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL 
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL}/reset-password`
+    : "http://localhost:3001/reset-password";
+
+  const { data: linkData, error: linkError } = await adminClient.auth.admin.generateLink({
+    type: "recovery",
+    email: parsed.data.email,
+    options: {
+      redirectTo: redirectUrl,
+    },
+  });
+
+  if (linkError || !linkData) {
+    return {
+      message: `Impossible de générer le lien: ${linkError?.message ?? "Erreur inconnue"}`,
+      status: "error",
+    };
+  }
+
+  return {
+    message: `Lien de réinitialisation généré avec succès pour ${parsed.data.email}`,
+    status: "success",
+    resetLink: linkData.properties.action_link,
+  };
+}

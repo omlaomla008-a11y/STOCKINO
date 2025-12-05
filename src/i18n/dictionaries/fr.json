@@ -51,6 +51,22 @@
       "hint": "Souvenez-vous de votre mot de passe ?",
       "back": "Retour à la connexion",
       "pending": "Envoi en cours"
+    },
+    "reset": {
+      "title": "Définir un nouveau mot de passe",
+      "description": "Choisissez un mot de passe sécurisé pour votre compte.",
+      "newPassword": "Nouveau mot de passe",
+      "passwordPlaceholder": "Au moins 6 caractères",
+      "confirmPassword": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Répétez le mot de passe",
+      "submit": "Mettre à jour le mot de passe",
+      "updating": "Mise à jour en cours...",
+      "successTitle": "Mot de passe mis à jour",
+      "successDescription": "Votre mot de passe a été mis à jour avec succès.",
+      "goToSignIn": "Aller à la connexion",
+      "invalidTitle": "Lien invalide",
+      "invalidDescription": "Le lien de réinitialisation est invalide ou a expiré.",
+      "requestNewLink": "Demander un nouveau lien"
     }
   },
   "sidebar": {
