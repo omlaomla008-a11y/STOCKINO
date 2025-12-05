@@ -2,10 +2,10 @@
 
 import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { UserPlus, Mail, Shield, User } from "lucide-react";
+import { UserPlus, Mail, Shield, User, Trash2 } from "lucide-react";
 
 import { USER_ROLES } from "@/lib/constants";
-import { updateUserRoleAction, inviteUserAction } from "@/lib/users/actions";
+import { updateUserRoleAction, inviteUserAction, deleteUserAction } from "@/lib/users/actions";
 import { useTranslations } from "@/components/i18n/translations-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -214,9 +214,15 @@ export function UsersClient({
                               {t("table.you")}
                             </span>
                           ) : (
-                            <span className="text-xs text-muted-foreground">
-                              {t("table.actions")}
-                            </span>
+                            <DeleteUserDialog
+                              userId={user.id}
+                              userEmail={user.email}
+                              userName={displayName}
+                              onSuccess={() => {
+                                setUsers((prev) => prev.filter((u) => u.id !== user.id));
+                                router.refresh();
+                              }}
+                            />
                           )}
                         </TableCell>
                       )}
@@ -345,6 +351,86 @@ function SubmitButton() {
         t("submit")
       )}
     </Button>
+  );
+}
+
+function DeleteUserDialog({
+  userId,
+  userEmail,
+  userName,
+  onSuccess,
+}: {
+  userId: string;
+  userEmail: string;
+  userName: string;
+  onSuccess: () => void;
+}) {
+  const t = useTranslations("users");
+  const tCommon = useTranslations("common");
+  const [open, setOpen] = useState(false);
+  const [isDeleting, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+
+  const handleDelete = () => {
+    setError(null);
+    startTransition(async () => {
+      const result = await deleteUserAction(userId);
+      if (result.status === "success") {
+        setOpen(false);
+        onSuccess();
+      } else {
+        setError(result.message);
+      }
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Supprimer l'utilisateur</DialogTitle>
+          <DialogDescription>
+            Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4">
+            <p className="text-sm font-medium">{userName}</p>
+            <p className="text-sm text-muted-foreground">{userEmail}</p>
+          </div>
+          {error && (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+              {error}
+            </div>
+          )}
+        </div>
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isDeleting}>
+            {tCommon("cancel")}
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Suppression...
+              </>
+            ) : (
+              "Supprimer"
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 

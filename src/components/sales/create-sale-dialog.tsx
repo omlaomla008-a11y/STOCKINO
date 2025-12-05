@@ -23,11 +23,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
-  SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import * as SelectPrimitive from "@radix-ui/react-select";
 import {
   Table,
   TableBody,
@@ -77,8 +77,9 @@ export function CreateSaleDialog({
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  // Produits disponibles (en stock)
-  const availableProducts = products.filter((p) => p.quantity > 0);
+  // Afficher TOUS les produits (pas seulement ceux en stock)
+  // Les produits en rupture seront désactivés mais visibles
+  const allProducts = products;
 
   const resetForm = () => {
     setSaleDate(new Date().toISOString().split("T")[0]);
@@ -231,32 +232,55 @@ export function CreateSaleDialog({
                 <SelectTrigger className="flex-1">
                   <SelectValue placeholder={t("selectProduct")} />
                 </SelectTrigger>
-                <SelectContent className="max-h-[400px] overflow-y-auto">
-                  {availableProducts.length === 0 ? (
+                <SelectPrimitive.Portal>
+                  <SelectPrimitive.Content
+                    className={cn(
+                      "relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+                      "max-h-[500px]"
+                    )}
+                    position="popper"
+                  >
+                    <SelectPrimitive.Viewport
+                      className={cn(
+                        "p-1 max-h-[500px] overflow-y-auto",
+                        "w-full min-w-[var(--radix-select-trigger-width)]"
+                      )}
+                    >
+                  {allProducts.length === 0 ? (
                     <div className="px-2 py-1.5 text-sm text-muted-foreground">
                       {t("noProducts")}
                     </div>
                   ) : (
-                    availableProducts.map((product) => {
+                    allProducts.map((product) => {
                       const alreadyInList = items.some((item) => item.productId === product.id);
                       const alreadyReserved = items
                         .filter((item) => item.productId === product.id)
                         .reduce((sum, item) => sum + item.quantity, 0);
                       const available = product.quantity - alreadyReserved;
+                      const isOutOfStock = available <= 0;
 
                       return (
                         <SelectItem
                           key={product.id}
                           value={product.id}
-                          disabled={alreadyInList || available <= 0}
+                          disabled={alreadyInList || isOutOfStock}
+                          className={isOutOfStock ? "opacity-50" : ""}
                         >
-                          {product.name} - Stock: {available} -{" "}
-                          {product.price ? formatCurrencySimple(product.price) : "Prix non défini"}
+                          <div className="flex items-center justify-between w-full">
+                            <span className="flex-1 truncate">{product.name}</span>
+                            <span className="ml-2 text-xs text-muted-foreground whitespace-nowrap">
+                              Stock: {available}
+                              {product.price && ` - ${formatCurrencySimple(product.price)}`}
+                              {isOutOfStock && " (Rupture)"}
+                            </span>
+                          </div>
                         </SelectItem>
                       );
                     })
                   )}
-                </SelectContent>
+                    </SelectPrimitive.Viewport>
+                  </SelectPrimitive.Content>
+                </SelectPrimitive.Portal>
               </Select>
               <Button
                 type="button"

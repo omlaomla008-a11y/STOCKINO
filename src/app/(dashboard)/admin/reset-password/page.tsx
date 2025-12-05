@@ -1,26 +1,27 @@
-"use client";
+import { redirect } from "next/navigation";
+import { AdminResetPasswordClient } from "./admin-reset-password-client";
+import { requireUser } from "@/lib/auth/session";
+import { getSupabaseAdminClient } from "@/lib/supabase/admin-client";
 
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
-import { Loader2 } from "lucide-react";
+export const dynamic = "force-dynamic";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { adminResetPasswordAction } from "@/lib/auth/actions";
-import {
-  authDefaultState,
-  type AuthFormState,
-} from "@/lib/auth/form-state";
+export default async function AdminResetPasswordPage() {
+  const user = await requireUser();
+  const adminClient = getSupabaseAdminClient();
 
-export default function AdminResetPasswordPage() {
+  // Vérifier que l'utilisateur est un admin
+  const { data: profile } = await adminClient
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (profile?.role !== "admin") {
+    redirect("/dashboard");
+  }
+
+  return <AdminResetPasswordClient />;
+}
   const [state, formAction] = useActionState<
     AuthFormState & { resetLink?: string },
     FormData

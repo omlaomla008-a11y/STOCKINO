@@ -226,6 +226,11 @@ const AdminResetPasswordSchema = z.object({
   email: z.string().email("Adresse email invalide"),
 });
 
+const AdminSetPasswordSchema = z.object({
+  email: z.string().email("Adresse email invalide"),
+  newPassword: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères"),
+});
+
 export async function adminResetPasswordAction(
   _prevState: AuthFormState | undefined,
   formData: FormData,
@@ -288,5 +293,86 @@ export async function adminResetPasswordAction(
     message: `Lien de réinitialisation généré avec succès pour ${parsed.data.email}`,
     status: "success",
     resetLink: linkData.properties.action_link,
+  };
+}
+
+// Action admin pour définir directement un nouveau mot de passe
+export async function adminSetPasswordAction(
+  _prevState: AuthFormState | undefined,
+  formData: FormData,
+): Promise<AuthFormState> {
+  // Vérifier que l'utilisateur actuel est un admin
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user: currentUser },
+  } = await supabase.auth.getUser();
+
+  if (!currentUser) {
+    return {
+      message: "Vous devez être connecté pour effectuer cette action.",
+      status: "error",
+    };
+  }
+
+  const adminClient = getSupabaseAdminClient();
+  const { data: profile } = await adminClient
+    .from("profiles")
+    .select("role")
+    .eq("id", currentUser.id)
+    .single();
+
+  if (profile?.role !== "admin") {
+    return {
+      message: "Seuls les administrateurs peuvent définir des mots de passe.",
+      status: "error",
+    };
+  }
+
+  const parsed = AdminSetPasswordSchema.safeParse({
+    email: formData.get("email"),
+    newPassword: formData.get("newPassword"),
+  });
+
+  if (!parsed.success) {
+    return {
+      message: parsed.error.issues[0]?.message ?? "Données invalides.",
+      status: "error",
+    };
+  }
+
+  // Récupérer l'utilisateur par email
+  const { data: users, error: listError } = await adminClient.auth.admin.listUsers();
+
+  if (listError) {
+    return {
+      message: "Impossible de récupérer les utilisateurs.",
+      status: "error",
+    };
+  }
+
+  const user = users.users.find((u) => u.email === parsed.data.email);
+
+  if (!user) {
+    return {
+      message: "Aucun utilisateur trouvé avec cet email.",
+      status: "error",
+    };
+  }
+
+  // Définir directement le nouveau mot de passe
+  const { error: updateError } = await adminClient.auth.admin.updateUserById(user.id, {
+    password: parsed.data.newPassword,
+  });
+
+  if (updateError) {
+    return {
+      message: `Impossible de définir le mot de passe: ${updateError.message}`,
+      status: "error",
+    };
+  }
+
+  return {
+    message: `Mot de passe défini avec succès pour ${parsed.data.email}. L'utilisateur peut maintenant se connecter avec ce nouveau mot de passe.`,
+    status: "success",
   };
 }

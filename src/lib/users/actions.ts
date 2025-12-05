@@ -225,3 +225,105 @@ export async function updateUserRoleAction(
     };
   }
 }
+
+export async function deleteUserAction(userId: string): Promise<ActionResult> {
+  // Obtenir l'utilisateur directement dans l'action
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/signin");
+  }
+
+  // Empêcher la suppression de soi-même
+  if (user.id === userId) {
+    return {
+      status: "error",
+      message: "Vous ne pouvez pas supprimer votre propre compte.",
+    };
+  }
+
+  const adminClient = getSupabaseAdminClient();
+  if (!adminClient) {
+    return {
+      status: "error",
+      message: "Erreur de configuration serveur.",
+    };
+  }
+
+  // Vérifier que l'utilisateur actuel est admin
+  const { data: currentProfile, error: currentProfileError } = await adminClient
+    .from("profiles")
+    .select("organization_id, role")
+    .eq("id", user.id)
+    .single();
+
+  if (
+    currentProfileError ||
+    !currentProfile?.organization_id ||
+    currentProfile.role !== "admin"
+  ) {
+    return {
+      status: "error",
+      message: "Seuls les administrateurs peuvent supprimer des utilisateurs.",
+    };
+  }
+
+  // Vérifier que l'utilisateur à supprimer appartient à la même organisation
+  const { data: targetProfile, error: targetProfileError } = await adminClient
+    .from("profiles")
+    .select("organization_id, email")
+    .eq("id", userId)
+    .single();
+
+  if (targetProfileError || !targetProfile) {
+    return {
+      status: "error",
+      message: "Utilisateur introuvable.",
+    };
+  }
+
+  if (targetProfile.organization_id !== currentProfile.organization_id) {
+    return {
+      status: "error",
+      message: "Vous ne pouvez supprimer que les utilisateurs de votre organisation.",
+    };
+  }
+
+  try {
+    // Supprimer le profil d'abord
+    const { error: profileDeleteError } = await adminClient
+      .from("profiles")
+      .delete()
+      .eq("id", userId)
+      .eq("organization_id", currentProfile.organization_id);
+
+    if (profileDeleteError) {
+      throw profileDeleteError;
+    }
+
+    // Supprimer l'utilisateur de l'authentification
+    const { error: authDeleteError } = await adminClient.auth.admin.deleteUser(userId);
+
+    if (authDeleteError) {
+      console.error("Erreur lors de la suppression de l'utilisateur auth:", authDeleteError);
+      // Ne pas échouer si le profil est déjà supprimé
+    }
+
+    revalidatePath("/settings");
+    revalidatePath("/users");
+
+    return {
+      status: "success",
+      message: `Utilisateur ${targetProfile.email} supprimé avec succès.`,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      status: "error",
+      message: "Impossible de supprimer l'utilisateur pour le moment.",
+    };
+  }
+}
