@@ -240,6 +240,18 @@
         "confirm": "Supprimer",
         "cancel": "Annuler",
         "pending": "Suppression..."
+      },
+      "details": {
+        "title": "Détail de la vente",
+        "description": "Visualisez les produits, quantités et prix enregistrés pour cette vente.",
+        "open": "Voir le détail",
+        "products": "Produits de la vente",
+        "product": "Produit",
+        "quantity": "Quantité",
+        "unitPrice": "Prix unitaire",
+        "subtotal": "Sous-total",
+        "total": "Total de la vente",
+        "noItems": "Aucun produit n'est associé à cette vente."
       }
     }
   },

@@ -19,6 +19,10 @@ const createSaleSchema = z.object({
   notes: z.string().optional().nullable(),
 });
 
+const saleIdSchema = z.object({
+  saleId: z.string().uuid(),
+});
+
 export type CreateSaleInput = z.infer<typeof createSaleSchema>;
 export type SaleItemInput = z.infer<typeof saleItemSchema>;
 
@@ -352,4 +356,125 @@ export async function deleteSaleAction(
     message: "Vente supprimée avec succès. Les stocks ont été restaurés.",
   };
 }
+
+export type SaleDetailsItem = {
+  productId: string;
+  productName: string;
+  productCategory: string | null;
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
+};
+
+export type SaleDetailsResult =
+  | {
+      status: "success";
+      sale: {
+        id: string;
+        organization_id: string;
+        sale_date: string;
+        total_amount: number;
+        created_by: string;
+        notes: string | null;
+        created_at: string;
+        updated_at: string;
+      };
+      items: SaleDetailsItem[];
+    }
+  | {
+      status: "error";
+      message: string;
+    };
+
+export async function getSaleDetailsAction(
+  input: z.infer<typeof saleIdSchema>,
+): Promise<SaleDetailsResult> {
+  const user = await requireUser();
+  const parsed = saleIdSchema.safeParse(input);
+
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "ID de vente invalide.",
+    };
+  }
+
+  const adminClient = getSupabaseAdminClient();
+
+  // Récupérer le profil pour vérifier l'organisation
+  const { data: profile, error: profileError } = await adminClient
+    .from("profiles")
+    .select("organization_id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profileError || !profile?.organization_id) {
+    return {
+      status: "error",
+      message: "Impossible de déterminer votre organisation.",
+    };
+  }
+
+  // Récupérer la vente
+  const { data: sale, error: saleError } = await adminClient
+    .from("sales")
+    .select("*")
+    .eq("id", parsed.data.saleId)
+    .single();
+
+  if (saleError || !sale) {
+    return {
+      status: "error",
+      message: "Vente introuvable.",
+    };
+  }
+
+  if (sale.organization_id !== profile.organization_id) {
+    return {
+      status: "error",
+      message: "Vous ne pouvez consulter que les ventes de votre organisation.",
+    };
+  }
+
+  // Récupérer le détail des lignes de vente avec les informations produit
+  const { data: items, error: itemsError } = await adminClient
+    .from("sales_items")
+    .select(
+      `
+        product_id,
+        quantity,
+        unit_price,
+        products (
+          name,
+          category
+        )
+      `,
+    )
+    .eq("sale_id", parsed.data.saleId);
+
+  if (itemsError) {
+    console.error(itemsError);
+    return {
+      status: "error",
+      message: "Impossible de récupérer le détail de la vente.",
+    };
+  }
+
+  const mappedItems: SaleDetailsItem[] =
+    items?.map((item: any) => ({
+      productId: item.product_id,
+      productName: item.products?.name ?? "Produit",
+      productCategory: item.products?.category ?? null,
+      quantity: item.quantity,
+      unitPrice: item.unit_price,
+      subtotal: item.quantity * item.unit_price,
+    })) ?? [];
+
+  return {
+    status: "success",
+    sale,
+    items: mappedItems,
+  };
+}
+
 

@@ -6,6 +6,7 @@ import { Calendar, Search, Trash2, X } from "lucide-react";
 
 import { CreateSaleDialog } from "@/components/sales/create-sale-dialog";
 import { DeleteSaleDialog } from "@/components/sales/delete-sale-dialog";
+import { SaleDetailsDialog } from "@/components/sales/sale-details-dialog";
 import { useTranslations } from "@/components/i18n/translations-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -279,7 +280,7 @@ export function SalesClient({
                           <TableHead className="text-right">{t("table.actions")}</TableHead>
                         </TableRow>
                       </TableHeader>
-                      <TableBody>
+                          <TableBody>
                         {filteredSales.map((sale) => (
                           <TableRow key={sale.id}>
                             <TableCell>
@@ -301,7 +302,16 @@ export function SalesClient({
                             <TableCell className="text-sm text-muted-foreground">
                               {formatDateTime(sale.created_at)}
                             </TableCell>
-                            <TableCell className="text-right">
+                            <TableCell className="text-right space-x-1">
+                              <SaleDetailsDialog
+                                sale={{
+                                  id: sale.id,
+                                  saleDate: sale.sale_date,
+                                  totalAmount: sale.total_amount,
+                                  notes: sale.notes,
+                                  createdAt: sale.created_at,
+                                }}
+                              />
                               <DeleteSaleDialog
                                 sale={{
                                   id: sale.id,
