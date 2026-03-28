@@ -195,8 +195,15 @@ export async function resetPasswordAction(
   }
 
   const supabase = await createSupabaseServerClient();
+
+  const passwordRedirectUrl = process.env.NEXT_PUBLIC_SITE_URL
+    ? `${process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "")}/reset-password`
+    : process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL
+      ? `${process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL.replace(/\/$/, "")}/reset-password`
+      : "http://localhost:3000/reset-password";
+
   const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
-    redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL ?? "http://localhost:3001/reset-password",
+    redirectTo: passwordRedirectUrl,
   });
 
   if (error) {

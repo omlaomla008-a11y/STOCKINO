@@ -1,7 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
+import { useState, useTransition, type FormEvent } from "react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 
@@ -24,12 +23,24 @@ import {
 
 export default function ForgotPasswordPage() {
   const t = useTranslations("auth.forgot");
-  const [state, formAction] = useActionState<AuthFormState, FormData>(
-    resetPasswordAction,
-    authDefaultState,
-  );
+  const [state, setState] = useState<AuthFormState>(authDefaultState);
+  const [isPending, startTransition] = useTransition();
 
   const isSuccess = state.status === "success";
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    startTransition(async () => {
+      const result = await resetPasswordAction(authDefaultState, formData);
+      setState(result);
+      if (result.status === "success") {
+        form.reset();
+      }
+    });
+  };
 
   return (
     <Card>
@@ -38,7 +49,7 @@ export default function ForgotPasswordPage() {
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={formAction} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">{t("email")}</Label>
             <Input
@@ -47,14 +58,23 @@ export default function ForgotPasswordPage() {
               type="email"
               required
               placeholder="vous@exemple.com"
+              autoComplete="email"
             />
           </div>
-          <SubmitButton />
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("pending", "…")}
+              </>
+            ) : (
+              t("submit")
+            )}
+          </Button>
         </form>
         {state.message ? (
           <p
             className={`mt-4 text-sm ${
-              isSuccess ? "text-green-600" : "text-destructive"
+              isSuccess ? "text-green-600 dark:text-green-500" : "text-destructive"
             }`}
           >
             {isSuccess ? t("success") : state.message}
@@ -69,22 +89,5 @@ export default function ForgotPasswordPage() {
         )}
       </CardContent>
     </Card>
-  );
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  const t = useTranslations("auth.forgot");
-
-  return (
-    <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? (
-        <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("pending", "…")}
-        </>
-      ) : (
-        t("submit")
-      )}
-    </Button>
   );
 }
