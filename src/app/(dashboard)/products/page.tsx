@@ -40,6 +40,7 @@ export default async function ProductsPage() {
         "id, organization_id, name, category, description, status, quantity, price, image_url, created_at, updated_at",
       )
       .eq("organization_id", organizationId)
+      .neq("status", "archived")
       .order("created_at", { ascending: false });
 
     products = data ?? [];

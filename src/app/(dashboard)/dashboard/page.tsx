@@ -24,7 +24,8 @@ export default async function DashboardPage() {
     const { data: products } = await adminClient
       .from("products")
       .select("id, name, quantity, status")
-      .eq("organization_id", organizationId);
+      .eq("organization_id", organizationId)
+      .neq("status", "archived");
 
     const totalProducts = products?.length ?? 0;
     const totalStock = products?.reduce((sum, p) => sum + p.quantity, 0) ?? 0;

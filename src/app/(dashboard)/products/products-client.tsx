@@ -63,7 +63,6 @@ export function ProductsClient({ organizationId, initialProducts }: ProductsClie
     { value: "in_stock", label: t("status.in_stock") },
     { value: "low_stock", label: t("status.low_stock") },
     { value: "out_of_stock", label: t("status.out_of_stock") },
-    { value: "archived", label: t("status.archived") },
   ];
 
   // Synchroniser avec les données initiales quand elles changent
@@ -82,20 +81,22 @@ export function ProductsClient({ organizationId, initialProducts }: ProductsClie
 
   // Filtrer les produits
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      const matchesSearch =
-        searchQuery === "" ||
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    return products
+      .filter((product) => product.status !== "archived")
+      .filter((product) => {
+        const matchesSearch =
+          searchQuery === "" ||
+          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesCategory =
-        selectedCategory === "all" || product.category === selectedCategory;
+        const matchesCategory =
+          selectedCategory === "all" || product.category === selectedCategory;
 
-      const matchesStatus = selectedStatus === "all" || product.status === selectedStatus;
+        const matchesStatus = selectedStatus === "all" || product.status === selectedStatus;
 
-      return matchesSearch && matchesCategory && matchesStatus;
-    });
+        return matchesSearch && matchesCategory && matchesStatus;
+      });
   }, [products, searchQuery, selectedCategory, selectedStatus]);
 
   const totalStock = useMemo(
@@ -122,9 +123,7 @@ export function ProductsClient({ organizationId, initialProducts }: ProductsClie
   };
 
   const handleProductArchived = (productId: string) => {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === productId ? { ...p, status: "archived" } : p)),
-    );
+    setProducts((prev) => prev.filter((p) => p.id !== productId));
     router.refresh();
   };
 

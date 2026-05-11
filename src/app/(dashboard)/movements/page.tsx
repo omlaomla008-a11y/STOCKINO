@@ -105,6 +105,7 @@ export default async function MovementsPage() {
         .from("products")
         .select("id, name, quantity, category, price")
         .eq("organization_id", organizationId)
+        .neq("status", "archived")
         .order("name", { ascending: true });
 
       if (productsError) {

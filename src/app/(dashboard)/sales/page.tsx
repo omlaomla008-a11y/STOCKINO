@@ -56,6 +56,7 @@ export default async function SalesPage() {
       .from("products")
       .select("id, name, price, quantity, category")
       .eq("organization_id", organizationId)
+      .neq("status", "archived")
       .order("name", { ascending: true });
 
     products = productsData;
