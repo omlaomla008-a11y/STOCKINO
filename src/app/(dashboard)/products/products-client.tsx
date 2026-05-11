@@ -121,6 +121,13 @@ export function ProductsClient({ organizationId, initialProducts }: ProductsClie
     router.refresh();
   };
 
+  const handleProductArchived = (productId: string) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === productId ? { ...p, status: "archived" } : p)),
+    );
+    router.refresh();
+  };
+
   const canCreate = Boolean(organizationId);
 
   const clearFilters = () => {
@@ -323,6 +330,7 @@ export function ProductsClient({ organizationId, initialProducts }: ProductsClie
                         <DeleteProductDialog
                           product={{ id: product.id, name: product.name }}
                           onProductDeleted={handleProductDeleted}
+                          onProductArchived={handleProductArchived}
                         />
                       </div>
                     </TableCell>

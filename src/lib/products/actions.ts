@@ -339,6 +339,10 @@ const deleteProductSchema = z.object({
   productId: z.string().uuid(),
 });
 
+const archiveProductSchema = z.object({
+  productId: z.string().uuid(),
+});
+
 export type DeleteProductResult =
   | {
       status: "success";
@@ -348,6 +352,93 @@ export type DeleteProductResult =
       status: "error";
       message: string;
     };
+
+export type ArchiveProductResult =
+  | {
+      status: "success";
+      message: string;
+    }
+  | {
+      status: "error";
+      message: string;
+    };
+
+export async function archiveProductAction(
+  input: z.infer<typeof archiveProductSchema>,
+): Promise<ArchiveProductResult> {
+  const user = await requireUser();
+  const parsed = archiveProductSchema.safeParse(input);
+
+  if (!parsed.success) {
+    return {
+      status: "error",
+      message: "ID de produit invalide.",
+    };
+  }
+
+  const adminClient = getSupabaseAdminClient();
+
+  const { data: profile, error: profileError } = await adminClient
+    .from("profiles")
+    .select("organization_id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profileError || !profile?.organization_id) {
+    return {
+      status: "error",
+      message: "Impossible de déterminer votre organisation.",
+    };
+  }
+
+  const { data: existingProduct, error: fetchError } = await adminClient
+    .from("products")
+    .select("organization_id, status")
+    .eq("id", parsed.data.productId)
+    .single();
+
+  if (fetchError || !existingProduct) {
+    return {
+      status: "error",
+      message: "Produit introuvable.",
+    };
+  }
+
+  if (existingProduct.organization_id !== profile.organization_id) {
+    return {
+      status: "error",
+      message: "Vous ne pouvez archiver que les produits de votre organisation.",
+    };
+  }
+
+  if (existingProduct.status === "archived") {
+    return {
+      status: "success",
+      message: "Produit déjà archivé.",
+    };
+  }
+
+  const { error: archiveError } = await adminClient
+    .from("products")
+    .update({ status: "archived" })
+    .eq("id", parsed.data.productId);
+
+  if (archiveError) {
+    console.error(archiveError);
+    return {
+      status: "error",
+      message: "Impossible d'archiver le produit. Réessayez.",
+    };
+  }
+
+  revalidatePath("/products");
+  revalidatePath("/dashboard");
+
+  return {
+    status: "success",
+    message: "Produit archivé avec succès.",
+  };
+}
 
 export async function deleteProductAction(
   input: z.infer<typeof deleteProductSchema>,
@@ -399,6 +490,36 @@ export async function deleteProductAction(
     };
   }
 
+  // Empêcher la suppression si le produit est déjà référencé dans l'historique
+  // (ventes ou bons), sinon la contrainte FK échoue côté base.
+  const [{ count: salesItemsCount, error: salesItemsError }, { count: receiptItemsCount, error: receiptItemsError }] =
+    await Promise.all([
+      adminClient
+        .from("sales_items")
+        .select("id", { count: "exact", head: true })
+        .eq("product_id", parsed.data.productId),
+      adminClient
+        .from("receipt_items")
+        .select("id", { count: "exact", head: true })
+        .eq("product_id", parsed.data.productId),
+    ]);
+
+  if (salesItemsError || receiptItemsError) {
+    console.error("Erreur de vérification des références produit:", salesItemsError ?? receiptItemsError);
+    return {
+      status: "error",
+      message: "Impossible de vérifier l'historique du produit. Réessayez.",
+    };
+  }
+
+  if ((salesItemsCount ?? 0) > 0 || (receiptItemsCount ?? 0) > 0) {
+    return {
+      status: "error",
+      message:
+        "Ce produit ne peut pas être supprimé car il est déjà utilisé dans l'historique (ventes ou bons). Modifiez son statut en 'Archivé' à la place.",
+    };
+  }
+
   // Supprimer l'image du storage si elle existe (utiliser le client admin pour bypass RLS)
   if (existingProduct.image_url) {
     try {
@@ -421,6 +542,15 @@ export async function deleteProductAction(
 
   if (deleteError) {
     console.error(deleteError);
+
+    if ((deleteError as { code?: string }).code === "23503") {
+      return {
+        status: "error",
+        message:
+          "Ce produit ne peut pas être supprimé car il est lié à des ventes ou des bons. Modifiez son statut en 'Archivé' à la place.",
+      };
+    }
+
     return {
       status: "error",
       message: "Impossible de supprimer le produit. Réessayez.",

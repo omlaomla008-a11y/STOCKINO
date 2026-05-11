@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { Loader2, Trash2 } from "lucide-react";
 
-import { deleteProductAction } from "@/lib/products/actions";
+import { archiveProductAction, deleteProductAction } from "@/lib/products/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,15 +24,22 @@ type Product = {
 type DeleteProductDialogProps = {
   product: Product;
   onProductDeleted: (productId: string) => void;
+  onProductArchived: (productId: string) => void;
 };
 
-export function DeleteProductDialog({ product, onProductDeleted }: DeleteProductDialogProps) {
+export function DeleteProductDialog({
+  product,
+  onProductDeleted,
+  onProductArchived,
+}: DeleteProductDialogProps) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<"delete" | "archive" | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
     setError(null);
+    setPendingAction("delete");
 
     startTransition(async () => {
       const result = await deleteProductAction({ productId: product.id });
@@ -44,6 +51,26 @@ export function DeleteProductDialog({ product, onProductDeleted }: DeleteProduct
 
       onProductDeleted(product.id);
       setOpen(false);
+      setPendingAction(null);
+    });
+  };
+
+  const handleArchive = () => {
+    setError(null);
+    setPendingAction("archive");
+
+    startTransition(async () => {
+      const result = await archiveProductAction({ productId: product.id });
+
+      if (result.status === "error") {
+        setError(result.message);
+        setPendingAction(null);
+        return;
+      }
+
+      onProductArchived(product.id);
+      setOpen(false);
+      setPendingAction(null);
     });
   };
 
@@ -77,11 +104,26 @@ export function DeleteProductDialog({ product, onProductDeleted }: DeleteProduct
           </DialogClose>
           <Button
             type="button"
+            variant="secondary"
+            onClick={handleArchive}
+            disabled={isPending}
+          >
+            {isPending && pendingAction === "archive" ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Archivage...
+              </>
+            ) : (
+              "Archiver"
+            )}
+          </Button>
+          <Button
+            type="button"
             variant="destructive"
             onClick={handleDelete}
             disabled={isPending}
           >
-            {isPending ? (
+            {isPending && pendingAction === "delete" ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Suppression...
