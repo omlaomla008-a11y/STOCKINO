@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   Package,
   Receipt,
+  ScanLine,
   Settings,
   ShoppingBag,
   Users,
@@ -13,6 +14,8 @@ export type NavItem = {
   titleKey: string;
   href: string;
   icon: LucideIcon;
+  openInNewTab?: boolean;
+  adminOnly?: boolean;
 };
 
 export const NAVIGATION_ITEMS: NavItem[] = [
@@ -40,6 +43,12 @@ export const NAVIGATION_ITEMS: NavItem[] = [
     titleKey: "reports",
     href: "/reports",
     icon: ClipboardList,
+  },
+  {
+    titleKey: "hardware",
+    href: "/hardware",
+    icon: ScanLine,
+    openInNewTab: true,
   },
   {
     titleKey: "users",

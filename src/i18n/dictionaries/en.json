@@ -77,6 +77,8 @@
     "reports": "Reports",
     "users": "Users",
     "settings": "Settings",
+    "hardware": "Hardware",
+    "hubAdmin": "Tech Hub (admin)",
     "quickAdd": "Add product"
   },
   "topbar": {

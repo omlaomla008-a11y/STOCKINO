@@ -11,32 +11,49 @@ import { Logo } from "@/components/common/logo";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 
-export function Sidebar() {
+type SidebarProps = {
+  isAdmin?: boolean;
+};
+
+export function Sidebar({ isAdmin = false }: SidebarProps) {
   const pathname = usePathname();
   const tSidebar = useTranslations("sidebar");
   const tTopbar = useTranslations("topbar");
+
+  const items = NAVIGATION_ITEMS.filter((item) => !item.adminOnly || isAdmin);
 
   return (
     <div className="hidden h-full w-64 shrink-0 border-r bg-background/80 px-4 py-6 backdrop-blur lg:flex lg:flex-col">
       <Logo />
       <ScrollArea className="mt-8 flex-1">
         <nav className="flex flex-col gap-1">
-          {NAVIGATION_ITEMS.map((item) => {
+          {items.map((item) => {
             const isActive =
               pathname === item.href ||
               (item.href !== "/dashboard" && pathname?.startsWith(item.href));
 
+            const linkClass = cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+              isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+            );
+
+            if (item.openInNewTab) {
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={linkClass}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{tSidebar(item.titleKey)}</span>
+                </a>
+              );
+            }
+
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                  isActive
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground",
-                )}
-              >
+              <Link key={item.href} href={item.href} className={linkClass}>
                 <item.icon className="h-4 w-4" />
                 <span>{tSidebar(item.titleKey)}</span>
               </Link>

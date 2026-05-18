@@ -33,12 +33,14 @@ type MobileNavProps = {
   profile: ProfileSummary;
   signingOut: boolean;
   onSignOut: () => void;
+  isAdmin?: boolean;
 };
 
 export function MobileNav({
   profile,
   signingOut,
   onSignOut,
+  isAdmin = false,
 }: MobileNavProps) {
   const pathname = usePathname();
   const tSidebar = useTranslations("sidebar");
@@ -48,6 +50,8 @@ export function MobileNav({
     profile.full_name ??
     profile.email.split("@")[0] ??
     "Utilisateur";
+
+  const items = NAVIGATION_ITEMS.filter((item) => !item.adminOnly || isAdmin);
 
   const initials = displayName
     .split(" ")
@@ -89,22 +93,33 @@ export function MobileNav({
         </div>
         <ScrollArea className="flex-1 px-4 py-4">
           <nav className="flex flex-col gap-1">
-            {NAVIGATION_ITEMS.map((item) => {
+            {items.map((item) => {
               const isActive =
                 pathname === item.href ||
                 (item.href !== "/dashboard" && pathname?.startsWith(item.href));
 
+              const linkClass = cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+              );
+
+              if (item.openInNewTab) {
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={linkClass}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{tSidebar(item.titleKey)}</span>
+                  </a>
+                );
+              }
+
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                    isActive
-                      ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground",
-                  )}
-                >
+                <Link key={item.href} href={item.href} className={linkClass}>
                   <item.icon className="h-4 w-4" />
                   <span>{tSidebar(item.titleKey)}</span>
                 </Link>

@@ -18,10 +18,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const gscVerification = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
+
 export const metadata: Metadata = {
-  title: "STOCKINO | Gestion de stock universelle",
+  title: {
+    default: "STOCKINO | Gestion de stock & Tech Hub",
+    template: "%s | STOCKINO",
+  },
   description:
-    "Tableau de bord intuitif pour piloter produits, ventes, entrées et sorties avec Supabase et React.",
+    "Gestion de stock pour professionnels, guides matériel et recommandations scanners & imprimantes d'étiquettes.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://stockino.space"),
+  ...(gscVerification
+    ? { verification: { google: gscVerification } }
+    : {}),
 };
 
 function getDirection(locale: Locale) {

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" role="img" aria-label="Scanner Zebra DS2208">
+  <rect width="400" height="300" fill="#f4f4f5"/>
+  <rect x="80" y="60" width="240" height="120" rx="12" fill="#18181b"/>
+  <rect x="100" y="85" width="80" height="8" rx="4" fill="#3f3f46"/>
+  <rect x="100" y="105" width="120" height="6" rx="3" fill="#52525b"/>
+  <rect x="100" y="125" width="60" height="6" rx="3" fill="#52525b"/>
+  <path d="M200 180 L320 220 L320 240 L200 200 Z" fill="#27272a"/>
+  <text x="200" y="270" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#71717a">Zebra DS2208</text>
+</svg>

@@ -1,0 +1,30 @@
+{
+  "slug": "zebra-ds2208",
+  "name": "Zebra DS2208",
+  "category": "scanners",
+  "image": "/images/hardware/zebra-ds2208.svg",
+  "shortDescription": "Scanner code-barres 1D/2D filaire, fiable pour entrepôt et point de vente. Référence polyvalente pour démarrer avec Stockino.",
+  "specs": [
+    "Lecture 1D et 2D (QR, Data Matrix)",
+    "Connexion USB filaire",
+    "Déclenchement automatique ou manuel",
+    "Compatible Windows, macOS, Android (OTG)"
+  ],
+  "pros": [
+    "Excellent rapport qualité-prix",
+    "Lecture rapide même sur étiquettes abîmées",
+    "Marque professionnelle reconnue en logistique"
+  ],
+  "cons": [
+    "Câble USB uniquement (pas de sans-fil)",
+    "Nécessite un adaptateur OTG sur certains smartphones"
+  ],
+  "useCases": [
+    "Inventaire en entrepôt avec PC portable",
+    "Caisse et reçus avec application web",
+    "PME e-commerce qui scanne les colis à l'expédition"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/s?k=zebra+ds2208",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": true
+}

@@ -32,9 +32,10 @@ type ProfileSummary = {
 
 type TopbarProps = {
   profile: ProfileSummary;
+  isAdmin?: boolean;
 };
 
-export function Topbar({ profile }: TopbarProps) {
+export function Topbar({ profile, isAdmin = false }: TopbarProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const t = useTranslations("topbar");
@@ -77,6 +78,7 @@ export function Topbar({ profile }: TopbarProps) {
           profile={profile}
           onSignOut={handleSignOut}
           signingOut={isPending}
+          isAdmin={isAdmin}
         />
         <div className="hidden flex-1 items-center gap-2 rounded-full border bg-muted/40 px-3 py-2 text-sm lg:flex">
           <Search className="h-4 w-4 text-muted-foreground" />
