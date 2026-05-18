@@ -66,3 +66,17 @@ AMAZON_ASSOCIATE_TAG=votretag-21
 4. Dans le studio, collez l’URL produit Amazon **sans** le tag : il sera ajouté automatiquement à l’enregistrement et à l’affichage.
 
 Mention légale affichée sur le site : « En tant que Partenaire Amazon… »
+
+## 7. Google Analytics 4
+
+1. Créez un flux Web sur [Google Analytics](https://analytics.google.com/) pour `https://stockino.space`.
+2. Copiez l’**ID de mesure** (format `G-XXXXXXXXXX`).
+3. Ajoutez sur **Netlify** et dans `.env.local` :
+
+```env
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-EHQY82PQ0F
+```
+
+4. Redéployez, puis visitez le site : le bandeau « collecte inactive » disparaît en quelques minutes (parfois jusqu’à 24–48 h).
+
+Les pages du hub et de l’app sont mesurées ; la mesure améliorée (défilements, clics sortants) se configure dans l’interface GA4.

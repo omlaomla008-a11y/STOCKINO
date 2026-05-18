@@ -7,6 +7,7 @@ import { DEFAULT_LOCALE, RTL_LOCALES, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { getRequestLocale } from "@/i18n/locale";
 import { DEFAULT_KEYWORDS, getDefaultOgImageUrl, getSiteUrl, SITE_NAME } from "@/lib/seo/site";
+import { GoogleAnalyticsProvider } from "@/components/analytics/google-analytics";
 import { AppProviders } from "./providers";
 
 const geistSans = Geist({
@@ -72,6 +73,7 @@ export default async function RootLayout({
         <TranslationsProvider locale={locale} dictionary={dictionary}>
           <AppProviders>{children}</AppProviders>
         </TranslationsProvider>
+        <GoogleAnalyticsProvider />
       </body>
     </html>
   );
