@@ -1,0 +1,32 @@
+{
+  "slug": "inateck-bcst-21",
+  "name": "Inateck BCST-21 AI",
+  "category": "scanners",
+  "image": "/images/hardware/placeholder.svg",
+  "shortDescription": "Scanner code-barres sans fil 1D/2D avec Bluetooth et dongle 2,4 GHz. Excellent rapport qualité-prix pour inventaire mobile et e-commerce.",
+  "specs": [
+    "Lecture 1D et 2D (QR, Code 128, EAN)",
+    "Bluetooth + récepteur USB 2,4 GHz",
+    "Batterie rechargeable (~2000 mAh)",
+    "Mode continu et déclenchement manuel",
+    "Compatible PC, Mac (clavier USB HID)"
+  ],
+  "pros": [
+    "Prix très compétitif pour un scanner 2D sans fil",
+    "Deux modes de connexion (BT ou dongle)",
+    "Léger et adapté aux petites équipes"
+  ],
+  "cons": [
+    "Marque moins « industriel » que Zebra ou Honeywell",
+    "Application mobile parfois nécessaire selon l’usage"
+  ],
+  "useCases": [
+    "Inventaire tournant en magasin ou entrepôt",
+    "Préparation de commandes e-commerce",
+    "Artisan ou PME qui démarre avec Stockino"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/dp/B0DJ6TDZZX",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": false,
+  "sortOrder": 1
+}

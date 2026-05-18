@@ -1,0 +1,32 @@
+{
+  "slug": "brother-ql-700",
+  "name": "Brother QL-700",
+  "category": "imprimantes",
+  "image": "/images/hardware/placeholder.svg",
+  "shortDescription": "Imprimante d’étiquettes thermique directe USB, jusqu’à 62 mm de large. Parfaite pour étiqueter rayons, emplacements et petits colis.",
+  "specs": [
+    "Impression thermique directe",
+    "Largeur max. 62 mm",
+    "Vitesse jusqu’à 150 mm/s",
+    "Connexion USB",
+    "Rouleaux DK Brother (plusieurs formats)"
+  ],
+  "pros": [
+    "Référence fiable pour les PME",
+    "Logiciel P-touch pour mise en page",
+    "Compacte et silencieuse"
+  ],
+  "cons": [
+    "Consommables DK spécifiques Brother",
+    "Pas d’impression 4×6 colis transporteurs sans adaptateur"
+  ],
+  "useCases": [
+    "Étiquettes produits et emplacements de stock",
+    "Codes-barres internes pour Stockino",
+    "Bureau e-commerce (petits formats)"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/dp/B007CV9FB0",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": false,
+  "sortOrder": 5
+}

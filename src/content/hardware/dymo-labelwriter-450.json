@@ -1,0 +1,32 @@
+{
+  "slug": "dymo-labelwriter-450",
+  "name": "DYMO LabelWriter 450",
+  "category": "imprimantes",
+  "image": "/images/hardware/placeholder.svg",
+  "shortDescription": "Imprimante d’étiquettes thermique USB iconique pour bureaux et commerces. Idéale pour adresses, prix et codes-barres internes.",
+  "specs": [
+    "Impression thermique directe",
+    "Résolution 600 × 300 dpi",
+    "Connexion USB",
+    "Compatible logiciel DYMO Label",
+    "Étiquettes DYMO dédiées"
+  ],
+  "pros": [
+    "Installation rapide, très répandue en PME",
+    "Qualité de texte et codes-barres nets",
+    "Large choix d’étiquettes DYMO"
+  ],
+  "cons": [
+    "Formats d’étiquettes propriétaires",
+    "Pas conçue pour rouleaux 10×15 cm transporteurs"
+  ],
+  "useCases": [
+    "Étiquetage prix et références en boutique",
+    "Adresses et identification de bacs / étagères",
+    "Complément d’un flux Stockino au bureau"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/dp/B002ZHDV3O",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": false,
+  "sortOrder": 6
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "munbyn-etiquettes-500",
+  "name": "MUNBYN — 500 étiquettes colis 10×15 cm",
+  "category": "consommables",
+  "image": "/images/hardware/placeholder.svg",
+  "shortDescription": "Rouleau de 500 étiquettes thermiques 100×150 mm pour expédition colis (format 4×6). Compatible imprimantes thermiques grand format.",
+  "specs": [
+    "Format 100 × 150 mm (4×6 pouces)",
+    "500 étiquettes par rouleau",
+    "Thermique direct, autocollant",
+    "Résistante eau / huile (selon fiche fabricant)",
+    "Compatible DHL, UPS, Chronopost, etc."
+  ],
+  "pros": [
+    "Prix bas par étiquette",
+    "Format standard e-commerce",
+    "Réassort fréquent = achat récurrent"
+  ],
+  "cons": [
+    "Vérifier compatibilité avec votre imprimante",
+    "Pas pour imprimantes bureau type DYMO 450"
+  ],
+  "useCases": [
+    "Expédition Shopify / Amazon Seller / Etsy",
+    "Préparation colis avec Stockino + transporteur",
+    "Stock e-commerce en francophonie"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/dp/B0BQQJV76C",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": false,
+  "sortOrder": 7
+}

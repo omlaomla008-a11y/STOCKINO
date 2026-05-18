@@ -1,0 +1,32 @@
+{
+  "slug": "netumscan-nsl8bl",
+  "name": "NetumScan NSL8BL Pro",
+  "category": "scanners",
+  "image": "/images/hardware/placeholder.svg",
+  "shortDescription": "Lecteur code-barres Bluetooth et USB, 1D/2D et QR. Bon choix polyvalent pour démarrer l’inventaire avec Stockino sans gros budget.",
+  "specs": [
+    "Lecture 1D, 2D et QR",
+    "Bluetooth + câble USB",
+    "Modes portable et fixe (support)",
+    "Compatible Windows, macOS, Linux",
+    "Fonctionnement clavier USB (HID)"
+  ],
+  "pros": [
+    "Prix d’entrée de gamme très attractif",
+    "Lit les QR (colis, étiquettes modernes)",
+    "Plusieurs modes de connexion"
+  ],
+  "cons": [
+    "Finitions moins premium que Zebra/Honeywell",
+    "Autonomie à surveiller en usage intensif"
+  ],
+  "useCases": [
+    "PME qui teste la gestion de stock en ligne",
+    "Petit entrepôt ou cave de stockage",
+    "Commerçant multi-canal (boutique + web)"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/dp/B0CXXNZ983",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": false,
+  "sortOrder": 3
+}

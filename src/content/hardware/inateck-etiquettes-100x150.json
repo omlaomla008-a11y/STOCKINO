@@ -1,0 +1,32 @@
+{
+  "slug": "inateck-etiquettes-100x150",
+  "name": "Inateck — 500 étiquettes expédition 100×150 mm",
+  "category": "consommables",
+  "image": "/images/hardware/placeholder.svg",
+  "shortDescription": "Lot de 500 étiquettes thermiques d’expédition 10×15 cm. Alternative économique aux rouleaux MUNBYN pour vendeurs en ligne.",
+  "specs": [
+    "500 étiquettes 100 × 150 mm",
+    "Thermique direct",
+    "Sans BPA/BPS (selon fabricant)",
+    "Adhésif renforcé",
+    "Format transporteurs majeurs"
+  ],
+  "pros": [
+    "Bon rapport quantité / prix",
+    "Marque souvent achetée avec scanners Inateck",
+    "Idéal en complément d’une imprimante 4×6"
+  ],
+  "cons": [
+    "Nécessite une imprimante compatible grand format",
+    "Stockage à l’abri de la chaleur"
+  ],
+  "useCases": [
+    "Boutiques en ligne qui expédient depuis un bureau",
+    "Réassort régulier d’étiquettes colis",
+    "Couplage avec imprimante Zebra / Brother grand format"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/dp/B08NWV5XD2",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": false,
+  "sortOrder": 8
+}

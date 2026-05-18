@@ -37,8 +37,10 @@ Le cookie de session dure **7 jours**.
 En local :
 
 ```bash
-node scripts/seed-first-hardware.mjs
+node scripts/seed-hub-hardware.mjs
 ```
+
+(Synchronise tous les fichiers `src/content/hardware/*.json` vers Supabase.)
 
 Ou exécutez **`supabase/seed/first_hardware_product.sql`** dans l’éditeur SQL Supabase.
 

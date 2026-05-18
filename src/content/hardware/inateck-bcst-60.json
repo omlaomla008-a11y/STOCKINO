@@ -1,0 +1,32 @@
+{
+  "slug": "inateck-bcst-60",
+  "name": "Inateck BCST-60",
+  "category": "scanners",
+  "image": "/images/hardware/placeholder.svg",
+  "shortDescription": "Scanner laser sans fil 1D avec dongle 2,4 GHz. Solution économique pour codes-barres classiques en magasin ou à l’expédition.",
+  "specs": [
+    "Lecture 1D (codes-barres standards)",
+    "Dongle USB 2,4 GHz (portée ~35 m annoncée)",
+    "Autonomie longue en veille",
+    "Scan automatique ou manuel",
+    "Plug-and-play sur PC"
+  ],
+  "pros": [
+    "Très abordable",
+    "Sans fil simple (pas de Bluetooth à appairer)",
+    "Suffisant si vous n’avez pas de QR"
+  ],
+  "cons": [
+    "Pas de lecture 2D / QR",
+    "Laser : précautions sur certains supports réfléchissants"
+  ],
+  "useCases": [
+    "Inventaire rapide de références 1D",
+    "Petite boutique ou stock arrière-boutique",
+    "Complément d’un poste fixe + mobile léger"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/dp/B075XKWG9M",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": false,
+  "sortOrder": 4
+}

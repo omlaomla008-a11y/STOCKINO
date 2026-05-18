@@ -1,0 +1,32 @@
+{
+  "slug": "munbyn-pda-android",
+  "name": "MUNBYN PDA Android (scanner 2D intégré)",
+  "category": "terminaux",
+  "image": "/images/hardware/placeholder.svg",
+  "shortDescription": "Terminal mobile Android avec scanner 2D intégré, Wi‑Fi et 4G. Pensé pour inventaires terrain et entrepôts sans PC au poignet.",
+  "specs": [
+    "Android 10 (interface PDA)",
+    "Scanner 2D intégré (module Zebra annoncé)",
+    "Wi‑Fi dual band, 4G, Bluetooth",
+    "Coque renforcée IP67 (selon fiche)",
+    "Batterie longue durée"
+  ],
+  "pros": [
+    "Tout-en-un : scan + écran + connectivité",
+    "Adapté aux inventaires en déplacement",
+    "Plus ergonomique qu’un téléphone + OTG"
+  ],
+  "cons": [
+    "Prix plus élevé qu’un simple scanner",
+    "Stockino s’utilise via navigateur : vérifier confort sur écran PDA"
+  ],
+  "useCases": [
+    "Inventaire annuel en entrepôt",
+    "Réception marchandises en quai",
+    "Équipes logistique sans poste fixe"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/dp/B0BTM5Y2MH",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": false,
+  "sortOrder": 9
+}

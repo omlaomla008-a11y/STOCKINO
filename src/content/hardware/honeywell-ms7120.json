@@ -1,0 +1,32 @@
+{
+  "slug": "honeywell-ms7120",
+  "name": "Honeywell MS7120 Orbit",
+  "category": "scanners",
+  "image": "/images/hardware/placeholder.svg",
+  "shortDescription": "Scanner code-barres fixe à lecture omnidirectionnelle. Idéal en caisse, accueil ou comptoir où les codes sont présentés devant le lecteur.",
+  "specs": [
+    "Lecture omnidirectionnelle 1D",
+    "Montage fixe (présentation du code)",
+    "Connexion USB",
+    "Détection automatique",
+    "Compatible mode clavier (HID)"
+  ],
+  "pros": [
+    "Mains libres : scan rapide au comptoir",
+    "Très fiable en retail et pharmacie",
+    "Installation simple plug-and-play"
+  ],
+  "cons": [
+    "1D uniquement (pas de QR complexes)",
+    "Fixe : peu adapté à l’inventaire mobile"
+  ],
+  "useCases": [
+    "Caisse et point de vente",
+    "Accueil client avec scan de cartes / codes",
+    "Boutique avec Stockino sur PC fixe"
+  ],
+  "affiliateUrl": "https://www.amazon.fr/dp/B01LH2G13O",
+  "affiliateLabel": "Voir sur Amazon.fr",
+  "featured": false,
+  "sortOrder": 2
+}
