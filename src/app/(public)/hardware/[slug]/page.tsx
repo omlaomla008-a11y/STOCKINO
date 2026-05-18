@@ -6,11 +6,15 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 
 import { AffiliateDisclosure } from "@/components/hub/affiliate-disclosure";
 import { MoroccoDeliveryNote } from "@/components/hub/morocco-delivery-note";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAllHardwareProducts, getHardwareProductBySlug } from "@/lib/content/hardware";
 import { getHardwareCategoryLabel } from "@/lib/content/hardware-labels";
+import { buildPublicMetadata } from "@/lib/seo/metadata";
+import { absoluteUrl } from "@/lib/seo/site";
+import { breadcrumbSchema } from "@/lib/seo/schemas";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -26,10 +30,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const product = await getHardwareProductBySlug(slug);
   if (!product) return { title: "Produit introuvable" };
 
-  return {
-    title: `${product.name} | Matériel STOCKINO`,
+  const image = product.image.startsWith("http")
+    ? product.image
+    : absoluteUrl(product.image);
+
+  return buildPublicMetadata({
+    title: product.name,
     description: product.shortDescription,
-  };
+    path: `/hardware/${slug}`,
+    ogImage: image,
+    keywords: [product.name, "scanner", "matériel stock", product.category],
+  });
 }
 
 export default async function HardwareDetailPage({ params }: PageProps) {
@@ -37,12 +48,16 @@ export default async function HardwareDetailPage({ params }: PageProps) {
   const product = await getHardwareProductBySlug(slug);
   if (!product) notFound();
 
-  const jsonLd = {
+  const productImage = product.image.startsWith("http")
+    ? product.image
+    : absoluteUrl(product.image);
+
+  const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
     description: product.shortDescription,
-    image: product.image,
+    image: productImage,
     offers: {
       "@type": "Offer",
       url: product.affiliateUrl,
@@ -52,9 +67,15 @@ export default async function HardwareDetailPage({ params }: PageProps) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Accueil", path: "/" },
+            { name: "Matériel", path: "/hardware" },
+            { name: product.name, path: `/hardware/${slug}` },
+          ]),
+          productSchema,
+        ]}
       />
       <Button variant="ghost" size="sm" asChild className="mb-6">
         <Link href="/hardware">

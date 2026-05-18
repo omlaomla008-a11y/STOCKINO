@@ -9,10 +9,14 @@ import { MarkdownContent } from "@/components/blog/markdown-content";
 import { HardwareCard } from "@/components/hardware/hardware-card";
 import { AffiliateDisclosure } from "@/components/hub/affiliate-disclosure";
 import { MoroccoDeliveryNote } from "@/components/hub/morocco-delivery-note";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getAllBlogSlugs, getBlogPostBySlug } from "@/lib/content/blog";
 import { getHardwareProductBySlug } from "@/lib/content/hardware";
+import { buildPublicMetadata } from "@/lib/seo/metadata";
+import { absoluteUrl } from "@/lib/seo/site";
+import { breadcrumbSchema } from "@/lib/seo/schemas";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -28,16 +32,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = await getBlogPostBySlug(slug);
   if (!post) return { title: "Article introuvable" };
 
-  return {
-    title: `${post.title} | STOCKINO Blog`,
+  return buildPublicMetadata({
+    title: post.title,
     description: post.description,
-    openGraph: {
-      title: post.title,
-      description: post.description,
-      type: "article",
-      publishedTime: post.publishedAt,
-    },
-  };
+    path: `/blog/${slug}`,
+    ogType: "article",
+    publishedTime: post.publishedAt,
+    modifiedTime: post.updatedAt,
+    ogImage: post.coverImage
+      ? post.coverImage.startsWith("http")
+        ? post.coverImage
+        : absoluteUrl(post.coverImage)
+      : undefined,
+    keywords: post.tags,
+  });
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
@@ -50,20 +58,28 @@ export default async function BlogPostPage({ params }: PageProps) {
   );
   const products = relatedProducts.filter((p) => p !== null);
 
-  const jsonLd = {
+  const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.description,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
+    author: { "@type": "Organization", name: "STOCKINO" },
+    publisher: { "@type": "Organization", name: "STOCKINO" },
   };
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Accueil", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: post.title, path: `/blog/${slug}` },
+          ]),
+          articleSchema,
+        ]}
       />
       <Button variant="ghost" size="sm" asChild className="mb-6">
         <Link href="/blog">

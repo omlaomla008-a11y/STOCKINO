@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://stockino.space";
+import { getSiteUrl } from "@/lib/seo/site";
+
+const BASE_URL = getSiteUrl();
 
 export default function robots(): MetadataRoute.Robots {
   return {

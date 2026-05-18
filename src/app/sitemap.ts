@@ -1,32 +1,34 @@
 import type { MetadataRoute } from "next";
 
-import { getAllBlogSlugs } from "@/lib/content/blog";
+import { getAllBlogPosts } from "@/lib/content/blog";
 import { getAllHardwareProducts } from "@/lib/content/hardware";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://stockino.space";
+import { getSiteUrl } from "@/lib/seo/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, blogSlugs] = await Promise.all([
+  const baseUrl = getSiteUrl();
+  const [products, blogPosts] = await Promise.all([
     getAllHardwareProducts(),
-    getAllBlogSlugs(),
+    getAllBlogPosts(),
   ]);
 
+  const now = new Date();
+
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
-    { url: `${BASE_URL}/hardware`, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE_URL}/blog`, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE_URL}/signin`, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE_URL}/signup`, changeFrequency: "monthly", priority: 0.6 },
+    { url: baseUrl, lastModified: now, changeFrequency: "weekly", priority: 1 },
+    { url: `${baseUrl}/hardware`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
   ];
 
   const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({
-    url: `${BASE_URL}/hardware/${p.slug}`,
+    url: `${baseUrl}/hardware/${p.slug}`,
+    lastModified: now,
     changeFrequency: "monthly",
     priority: 0.8,
   }));
 
-  const blogRoutes: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
-    url: `${BASE_URL}/blog/${slug}`,
+  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt ?? post.publishedAt),
     changeFrequency: "monthly",
     priority: 0.8,
   }));

@@ -6,6 +6,7 @@ import { TranslationsProvider } from "@/components/i18n/translations-provider";
 import { DEFAULT_LOCALE, RTL_LOCALES, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { getRequestLocale } from "@/i18n/locale";
+import { DEFAULT_KEYWORDS, getDefaultOgImageUrl, getSiteUrl, SITE_NAME } from "@/lib/seo/site";
 import { AppProviders } from "./providers";
 
 const geistSans = Geist({
@@ -20,14 +21,33 @@ const geistMono = Geist_Mono({
 
 const gscVerification = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
   title: {
-    default: "STOCKINO | Gestion de stock & Tech Hub",
-    template: "%s | STOCKINO",
+    default: `${SITE_NAME} | Gestion de stock & Tech Hub`,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Gestion de stock pour professionnels, guides matériel et recommandations scanners & imprimantes d'étiquettes.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://stockino.space"),
+    "Gestion de stock pour professionnels, guides matériel et recommandations scanners & imprimantes d'étiquettes — France & Maroc.",
+  keywords: [...DEFAULT_KEYWORDS],
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    url: siteUrl,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} | Gestion de stock & Tech Hub`,
+    description:
+      "Gestion de stock pour professionnels, guides matériel et recommandations scanners & imprimantes d'étiquettes.",
+    images: [{ url: getDefaultOgImageUrl(), width: 1200, height: 630, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: "Gestion de stock & hub matériel pour professionnels.",
+    images: [getDefaultOgImageUrl()],
+  },
   ...(gscVerification
     ? { verification: { google: gscVerification } }
     : {}),
