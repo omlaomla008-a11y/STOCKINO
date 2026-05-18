@@ -1,0 +1,47 @@
+-- Premier produit Tech Hub : Zebra DS2208 (à exécuter une fois dans l’éditeur SQL Supabase)
+INSERT INTO hub_hardware_products (
+  slug,
+  name,
+  category,
+  image,
+  short_description,
+  specs,
+  pros,
+  cons,
+  use_cases,
+  affiliate_url,
+  affiliate_label,
+  featured,
+  published,
+  sort_order
+) VALUES (
+  'zebra-ds2208',
+  'Zebra DS2208',
+  'scanners',
+  '/images/hardware/zebra-ds2208.svg',
+  'Scanner code-barres 1D/2D filaire, fiable pour entrepôt et point de vente. Référence polyvalente pour démarrer avec Stockino.',
+  '["Lecture 1D et 2D (QR, Data Matrix)","Connexion USB filaire","Déclenchement automatique ou manuel","Compatible Windows, macOS, Android (OTG)"]'::jsonb,
+  '["Excellent rapport qualité-prix","Lecture rapide même sur étiquettes abîmées","Marque professionnelle reconnue en logistique"]'::jsonb,
+  '["Câble USB uniquement (pas de sans-fil)","Nécessite un adaptateur OTG sur certains smartphones"]'::jsonb,
+  '["Inventaire en entrepôt avec PC portable","Caisse et reçus avec application web","PME e-commerce qui scanne les colis à l''expédition"]'::jsonb,
+  'https://www.amazon.fr/dp/B06VYGFGR7',
+  'Voir sur Amazon.fr',
+  true,
+  true,
+  0
+)
+ON CONFLICT (slug) DO UPDATE SET
+  name = EXCLUDED.name,
+  category = EXCLUDED.category,
+  image = EXCLUDED.image,
+  short_description = EXCLUDED.short_description,
+  specs = EXCLUDED.specs,
+  pros = EXCLUDED.pros,
+  cons = EXCLUDED.cons,
+  use_cases = EXCLUDED.use_cases,
+  affiliate_url = EXCLUDED.affiliate_url,
+  affiliate_label = EXCLUDED.affiliate_label,
+  featured = EXCLUDED.featured,
+  published = EXCLUDED.published,
+  sort_order = EXCLUDED.sort_order,
+  updated_at = now();

@@ -32,16 +32,28 @@ Redéployez après modification sur Netlify.
 
 Le cookie de session dure **7 jours**.
 
-## 3. Contenu public
+## 3. Premier produit (Zebra DS2208)
+
+En local :
+
+```bash
+node scripts/seed-first-hardware.mjs
+```
+
+Ou exécutez **`supabase/seed/first_hardware_product.sql`** dans l’éditeur SQL Supabase.
+
+Fiche : `https://stockino.space/hardware/zebra-ds2208`
+
+## 4. Contenu public
 
 - Publié → visible sur `/hardware` et `/blog`
 - Non publié → visible uniquement dans le studio
 
-## 4. Images
+## 5. Images
 
 Upload via le studio → bucket Supabase **`product-images`** (dossier `hub/`).
 
-## 5. Affiliation Amazon.fr
+## 6. Affiliation Amazon.fr
 
 1. Inscrivez-vous sur [Amazon Partenaires France](https://partenaires.amazon.fr/).
 2. Récupérez votre **ID de suivi** (ex. `stockino-21`).
