@@ -80,3 +80,21 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=G-EHQY82PQ0F
 4. Redéployez, puis visitez le site : le bandeau « collecte inactive » disparaît en quelques minutes (parfois jusqu’à 24–48 h).
 
 Les pages du hub et de l’app sont mesurées ; la mesure améliorée (défilements, clics sortants) se configure dans l’interface GA4.
+
+## 8. Pages légales (hub public)
+
+- `/contact` — contact & à propos
+- `/mentions-legales` — éditeur, hébergement, affiliation Amazon
+- `/confidentialite` — RGPD, cookies, GA4, sous-traitants
+
+Variables optionnelles (Netlify) pour personnaliser les textes :
+
+```env
+NEXT_PUBLIC_SITE_PUBLISHER_NAME=Stockino
+NEXT_PUBLIC_SITE_LEGAL_FORM=
+NEXT_PUBLIC_SITE_PUBLISHER_ADDRESS=
+NEXT_PUBLIC_SITE_SIRET=
+NEXT_PUBLIC_SITE_CONTACT_EMAIL=contact@stockino.space
+```
+
+Liens dans le pied de page de toutes les pages publiques du hub.
