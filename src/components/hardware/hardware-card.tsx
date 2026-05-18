@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
-
+import { AmazonAffiliateLink } from "@/components/affiliate/amazon-affiliate-link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,14 +50,9 @@ export function HardwareCard({ product, compact = false }: HardwareCardProps) {
           <Link href={`/hardware/${product.slug}`}>Voir la fiche</Link>
         </Button>
         <Button className="w-full sm:flex-1" asChild>
-          <a
-            href={product.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored"
-          >
+          <AmazonAffiliateLink href={product.affiliateUrl} showIcon>
             {product.affiliateLabel ?? "Acheter sur Amazon.fr"}
-            <ExternalLink className="ml-2 h-4 w-4" />
-          </a>
+          </AmazonAffiliateLink>
         </Button>
       </CardFooter>
     </Card>

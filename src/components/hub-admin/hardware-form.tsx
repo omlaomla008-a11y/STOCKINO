@@ -171,14 +171,18 @@ export function HardwareForm({ product, basePath = "/studio" }: HardwareFormProp
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="affiliateUrl">Lien Amazon.fr (affiliation)</Label>
+          <Label htmlFor="affiliateUrl">Lien Amazon.fr (page produit ou recherche)</Label>
           <Input
             id="affiliateUrl"
             name="affiliateUrl"
             type="url"
             defaultValue={product?.affiliate_url}
+            placeholder="https://www.amazon.fr/dp/..."
             required
           />
+          <p className="text-xs text-muted-foreground">
+            Le tag partenaire est ajouté automatiquement (variable AMAZON_ASSOCIATE_TAG).
+          </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="affiliateLabel">Texte du bouton</Label>

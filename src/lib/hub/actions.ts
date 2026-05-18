@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { buildAmazonAffiliateUrl } from "@/lib/affiliate/amazon";
 import { requireHubStudio } from "@/lib/hub/studio-auth";
 import { HARDWARE_CATEGORIES } from "@/types/hub";
 
@@ -129,7 +130,7 @@ export async function createHardwareAction(
     pros: linesToArray(d.pros),
     cons: linesToArray(d.cons),
     use_cases: linesToArray(d.useCases),
-    affiliate_url: d.affiliateUrl,
+    affiliate_url: buildAmazonAffiliateUrl(d.affiliateUrl),
     affiliate_label: d.affiliateLabel,
     featured: d.featured,
     published: d.published,
@@ -147,7 +148,7 @@ export async function createHardwareAction(
 
   revalidateHub();
   revalidatePath(`/hardware/${d.slug}`);
-  return { status: "success", message: "Produit créé." };
+  return { status: "success", message: "Produit créé avec lien affilié Amazon." };
 }
 
 export async function updateHardwareAction(
@@ -192,7 +193,7 @@ export async function updateHardwareAction(
       pros: linesToArray(d.pros),
       cons: linesToArray(d.cons),
       use_cases: linesToArray(d.useCases),
-      affiliate_url: d.affiliateUrl,
+      affiliate_url: buildAmazonAffiliateUrl(d.affiliateUrl),
       affiliate_label: d.affiliateLabel,
       featured: d.featured,
       published: d.published,
@@ -206,7 +207,7 @@ export async function updateHardwareAction(
 
   revalidateHub();
   revalidatePath(`/hardware/${d.slug}`);
-  return { status: "success", message: "Produit mis à jour." };
+  return { status: "success", message: "Produit mis à jour avec lien affilié Amazon." };
 }
 
 export async function deleteHardwareAction(id: string): Promise<HubActionState> {

@@ -2,6 +2,8 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import { buildAmazonAffiliateUrl, isAmazonUrl } from "@/lib/affiliate/amazon";
+
 type MarkdownContentProps = {
   content: string;
 };
@@ -38,9 +40,11 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
               </Link>
             );
           }
+          const externalHref =
+            href && isAmazonUrl(href) ? buildAmazonAffiliateUrl(href) : href;
           return (
             <a
-              href={href}
+              href={externalHref}
               target="_blank"
               rel="noopener noreferrer sponsored"
               className="font-medium text-primary underline underline-offset-4"

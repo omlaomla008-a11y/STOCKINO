@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
+import { AmazonAffiliateLink } from "@/components/affiliate/amazon-affiliate-link";
 import { AffiliateDisclosure } from "@/components/hub/affiliate-disclosure";
+import { buildAmazonAffiliateUrl } from "@/lib/affiliate/amazon";
 import { MoroccoDeliveryNote } from "@/components/hub/morocco-delivery-note";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
@@ -52,6 +54,8 @@ export default async function HardwareDetailPage({ params }: PageProps) {
     ? product.image
     : absoluteUrl(product.image);
 
+  const affiliateBuyUrl = buildAmazonAffiliateUrl(product.affiliateUrl);
+
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -60,7 +64,7 @@ export default async function HardwareDetailPage({ params }: PageProps) {
     image: productImage,
     offers: {
       "@type": "Offer",
-      url: product.affiliateUrl,
+      url: affiliateBuyUrl,
       availability: "https://schema.org/InStock",
     },
   };
@@ -104,14 +108,9 @@ export default async function HardwareDetailPage({ params }: PageProps) {
           <p className="text-muted-foreground">{product.shortDescription}</p>
           <MoroccoDeliveryNote />
           <Button size="lg" asChild>
-            <a
-              href={product.affiliateUrl}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-            >
+            <AmazonAffiliateLink href={product.affiliateUrl} showIcon>
               {product.affiliateLabel ?? "Acheter sur Amazon.fr"}
-              <ExternalLink className="ml-2 h-4 w-4" />
-            </a>
+            </AmazonAffiliateLink>
           </Button>
         </div>
       </div>

@@ -40,3 +40,17 @@ Le cookie de session dure **7 jours**.
 ## 4. Images
 
 Upload via le studio → bucket Supabase **`product-images`** (dossier `hub/`).
+
+## 5. Affiliation Amazon.fr
+
+1. Inscrivez-vous sur [Amazon Partenaires France](https://partenaires.amazon.fr/).
+2. Récupérez votre **ID de suivi** (ex. `stockino-21`).
+3. Ajoutez sur **Netlify** et dans `.env.local` :
+
+```env
+AMAZON_ASSOCIATE_TAG=votretag-21
+```
+
+4. Dans le studio, collez l’URL produit Amazon **sans** le tag : il sera ajouté automatiquement à l’enregistrement et à l’affichage.
+
+Mention légale affichée sur le site : « En tant que Partenaire Amazon… »
