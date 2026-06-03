@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
         hostname: "**.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: "https",
+        hostname: "stockino.space",
+      },
+      {
+        protocol: "https",
+        hostname: "www.stockino.space",
+      },
     ],
   },
   // Désactiver ESLint pendant le build pour Netlify

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import { format } from "date-fns";
@@ -6,29 +5,23 @@ import { fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { absoluteUrl } from "@/lib/seo/site";
+import { normalizeBlogCoverSrc } from "@/lib/hub/blog-cover";
 import type { BlogPostMeta } from "@/types/hub";
 
 type BlogCardProps = {
   post: BlogPostMeta;
 };
 
-function coverSrc(post: BlogPostMeta): string | null {
-  const raw = post.coverImage?.trim();
-  if (!raw) return null;
-  if (raw.startsWith("http")) return raw;
-  return absoluteUrl(raw.startsWith("/") ? raw : `/${raw}`);
-}
-
 export function BlogCard({ post }: BlogCardProps) {
   const date = new Date(post.publishedAt);
-  const image = coverSrc(post);
+  const image = normalizeBlogCoverSrc(post.coverImage);
 
   return (
     <Card className="h-full overflow-hidden transition-shadow hover:shadow-md">
       {image ? (
-        <Link href={`/blog/${post.slug}`} className="relative block aspect-[16/9] bg-muted">
-          <Image src={image} alt="" fill className="object-cover" sizes="(max-width: 640px) 100vw, 320px" />
+        <Link href={`/blog/${post.slug}`} className="block aspect-[16/9] overflow-hidden bg-muted">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={image} alt="" className="h-full w-full object-cover" loading="lazy" />
         </Link>
       ) : null}
       <CardHeader className="space-y-3">

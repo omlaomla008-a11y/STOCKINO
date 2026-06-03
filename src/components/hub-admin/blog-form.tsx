@@ -198,8 +198,16 @@ export function BlogForm({ post, basePath = "/studio" }: BlogFormProps) {
         <Input
           value={coverImage}
           onChange={(e) => setCoverImage(e.target.value)}
-          placeholder="https://… ou /images/…"
+          placeholder="https://votre-projet.supabase.co/storage/… ou /images/…"
         />
+        {coverImage.trim() &&
+        !coverImage.trim().startsWith("http") &&
+        !coverImage.trim().startsWith("/") ? (
+          <p className="text-xs text-amber-700 dark:text-amber-400">
+            L&apos;URL doit commencer par https:// ou /. Utilisez « Uploader » pour générer
+            automatiquement le lien Supabase.
+          </p>
+        ) : null}
         {coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img

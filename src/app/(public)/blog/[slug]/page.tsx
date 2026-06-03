@@ -11,6 +11,7 @@ import { HardwareCard } from "@/components/hardware/hardware-card";
 import { AffiliateDisclosure } from "@/components/hub/affiliate-disclosure";
 import { MoroccoDeliveryNote } from "@/components/hub/morocco-delivery-note";
 import { shouldShowBlogAffiliateBlocks } from "@/lib/hub/blog-affiliate";
+import { normalizeBlogCoverSrc } from "@/lib/hub/blog-cover";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,11 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ogType: "article",
     publishedTime: post.publishedAt,
     modifiedTime: post.updatedAt,
-    ogImage: post.coverImage
-      ? post.coverImage.startsWith("http")
-        ? post.coverImage
-        : absoluteUrl(post.coverImage)
-      : undefined,
+    ogImage: normalizeBlogCoverSrc(post.coverImage) ?? undefined,
     keywords: post.tags,
   });
 }
@@ -60,7 +57,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   );
   const products = relatedProducts.filter((p) => p !== null);
   const showAffiliate = shouldShowBlogAffiliateBlocks(post);
-  const coverSrc = post.coverImage?.trim();
+  const coverSrc = normalizeBlogCoverSrc(post.coverImage);
 
   const articleSchema = {
     "@context": "https://schema.org",

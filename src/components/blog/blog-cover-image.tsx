@@ -1,6 +1,4 @@
-import Image from "next/image";
-
-import { absoluteUrl } from "@/lib/seo/site";
+import { normalizeBlogCoverSrc } from "@/lib/hub/blog-cover";
 
 type BlogCoverImageProps = {
   src: string;
@@ -9,14 +7,13 @@ type BlogCoverImageProps = {
   className?: string;
 };
 
-function toImageSrc(src: string): string {
-  const trimmed = src.trim();
-  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) return trimmed;
-  return absoluteUrl(trimmed.startsWith("/") ? trimmed : `/${trimmed}`);
-}
-
+/**
+ * Affichage couverture article : balise img native pour éviter les blocages
+ * du optimiseur Next.js sur les URLs Supabase ou médias externes.
+ */
 export function BlogCoverImage({ src, alt, priority, className }: BlogCoverImageProps) {
-  const resolved = toImageSrc(src);
+  const resolved = normalizeBlogCoverSrc(src);
+  if (!resolved) return null;
 
   return (
     <div
@@ -25,13 +22,13 @@ export function BlogCoverImage({ src, alt, priority, className }: BlogCoverImage
         "relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-xl border bg-muted"
       }
     >
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src={resolved}
         alt={alt}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, 672px"
-        priority={priority}
+        className="h-full w-full object-cover"
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
       />
     </div>
   );
