@@ -5,10 +5,12 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { ArrowLeft } from "lucide-react";
 
+import { BlogCoverImage } from "@/components/blog/blog-cover-image";
 import { MarkdownContent } from "@/components/blog/markdown-content";
 import { HardwareCard } from "@/components/hardware/hardware-card";
 import { AffiliateDisclosure } from "@/components/hub/affiliate-disclosure";
 import { MoroccoDeliveryNote } from "@/components/hub/morocco-delivery-note";
+import { shouldShowBlogAffiliateBlocks } from "@/lib/hub/blog-affiliate";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,6 +59,8 @@ export default async function BlogPostPage({ params }: PageProps) {
     (post.relatedHardwareSlugs ?? []).map((s) => getHardwareProductBySlug(s)),
   );
   const products = relatedProducts.filter((p) => p !== null);
+  const showAffiliate = shouldShowBlogAffiliateBlocks(post);
+  const coverSrc = post.coverImage?.trim();
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -67,6 +71,11 @@ export default async function BlogPostPage({ params }: PageProps) {
     dateModified: post.updatedAt ?? post.publishedAt,
     author: { "@type": "Organization", name: "STOCKINO" },
     publisher: { "@type": "Organization", name: "STOCKINO" },
+    ...(coverSrc
+      ? {
+          image: coverSrc.startsWith("http") ? coverSrc : absoluteUrl(coverSrc),
+        }
+      : {}),
   };
 
   return (
@@ -95,14 +104,20 @@ export default async function BlogPostPage({ params }: PageProps) {
       </p>
       <p className="mt-4 text-lg text-muted-foreground">{post.description}</p>
 
+      {coverSrc ? (
+        <BlogCoverImage src={coverSrc} alt={post.title} priority />
+      ) : null}
+
       <div className="prose prose-neutral dark:prose-invert mt-10 max-w-none">
         <MarkdownContent content={post.content} />
       </div>
 
-      <div className="mt-10 space-y-4">
-        <MoroccoDeliveryNote />
-        <AffiliateDisclosure />
-      </div>
+      {showAffiliate ? (
+        <div className="mt-10 space-y-4">
+          <MoroccoDeliveryNote />
+          <AffiliateDisclosure />
+        </div>
+      ) : null}
 
       {products.length > 0 ? (
         <section className="mt-14 border-t pt-10">

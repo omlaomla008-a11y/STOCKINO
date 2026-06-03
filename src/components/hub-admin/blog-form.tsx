@@ -1,13 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 
 import {
   createBlogPostAction,
   updateBlogPostAction,
+  uploadHubImageAction,
   type HubActionState,
 } from "@/lib/hub/actions";
+import { AFFILIATE_BLOG_CATEGORIES } from "@/lib/hub/blog-affiliate";
 import type { HubBlogRow } from "@/lib/hub/db-types";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -16,6 +18,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 const initialState: HubActionState = { status: "idle" };
+
+const BLOG_CATEGORY_SUGGESTIONS = [
+  ...AFFILIATE_BLOG_CATEGORIES,
+  "Actualités",
+  "Logistique",
+  "Gestion de stock",
+  "International",
+  "Tutoriels",
+];
 
 type BlogFormProps = {
   post?: HubBlogRow;
@@ -32,20 +43,39 @@ export function BlogForm({ post, basePath = "/studio" }: BlogFormProps) {
   const isEdit = Boolean(post);
   const action = isEdit ? updateBlogPostAction : createBlogPostAction;
   const [state, formAction, pending] = useActionState(action, initialState);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [coverImage, setCoverImage] = useState(post?.cover_image ?? "");
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (state.status === "success") {
       router.push(`${basePath}/blog`);
       router.refresh();
     }
-  }, [state.status, router]);
+  }, [state.status, router, basePath]);
 
   const publishedAtDefault =
     post?.published_at?.split("T")[0] ?? new Date().toISOString().split("T")[0];
 
+  const handleUpload = async () => {
+    const file = fileRef.current?.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const fd = new FormData();
+    fd.append("file", file);
+    const result = await uploadHubImageAction(fd);
+    setUploading(false);
+    if (result.status === "success" && result.imageUrl) {
+      setCoverImage(result.imageUrl);
+    } else {
+      alert(result.message ?? "Échec de l'upload");
+    }
+  };
+
   return (
     <form action={formAction} className="mx-auto max-w-3xl space-y-6">
       {isEdit ? <input type="hidden" name="id" value={post!.id} /> : null}
+      <input type="hidden" name="coverImage" value={coverImage} />
 
       {state.status === "error" ? (
         <Alert variant="destructive">
@@ -97,9 +127,21 @@ export function BlogForm({ post, basePath = "/studio" }: BlogFormProps) {
         <Input
           id="category"
           name="category"
+          list="blog-categories"
           defaultValue={post?.category ?? ""}
-          placeholder="Guides d'achat"
+          placeholder="Actualités"
         />
+        <datalist id="blog-categories">
+          {BLOG_CATEGORY_SUGGESTIONS.map((c) => (
+            <option key={c} value={c} />
+          ))}
+        </datalist>
+        <p className="text-xs text-muted-foreground">
+          Mentions Amazon affichées uniquement pour «{" "}
+          {AFFILIATE_BLOG_CATEGORIES.join(" » ou « ")} », ou si des produits liés sont
+          renseignés. Les autres catégories (Actualités, Logistique, etc.) n&apos;affichent pas
+          ces blocs.
+        </p>
       </div>
 
       <div className="space-y-2">
@@ -131,12 +173,41 @@ export function BlogForm({ post, basePath = "/studio" }: BlogFormProps) {
             defaultValue={arrayToLines(post?.related_hardware_slugs)}
             placeholder="zebra-ds2208"
           />
+          <p className="text-xs text-muted-foreground">
+            Laissez vide pour un article éditorial sans fiches matériel.
+          </p>
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="coverImage">Image de couverture (URL optionnelle)</Label>
-        <Input id="coverImage" name="coverImage" defaultValue={post?.cover_image ?? ""} />
+      <div className="space-y-3 rounded-lg border p-4">
+        <Label>Image de couverture</Label>
+        <p className="text-xs text-muted-foreground">
+          Affichée en haut de l&apos;article (sous le titre). Uploadez une image ou collez une URL.
+        </p>
+        <div className="flex flex-wrap items-end gap-3">
+          <Input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="max-w-xs"
+          />
+          <Button type="button" variant="secondary" onClick={handleUpload} disabled={uploading}>
+            {uploading ? "Envoi…" : "Uploader"}
+          </Button>
+        </div>
+        <Input
+          value={coverImage}
+          onChange={(e) => setCoverImage(e.target.value)}
+          placeholder="https://… ou /images/…"
+        />
+        {coverImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={coverImage}
+            alt="Aperçu couverture"
+            className="mt-2 max-h-40 rounded-md border object-cover"
+          />
+        ) : null}
       </div>
 
       <label className="flex items-center gap-2 text-sm">

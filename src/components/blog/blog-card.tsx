@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import { format } from "date-fns";
@@ -5,17 +6,31 @@ import { fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { absoluteUrl } from "@/lib/seo/site";
 import type { BlogPostMeta } from "@/types/hub";
 
 type BlogCardProps = {
   post: BlogPostMeta;
 };
 
+function coverSrc(post: BlogPostMeta): string | null {
+  const raw = post.coverImage?.trim();
+  if (!raw) return null;
+  if (raw.startsWith("http")) return raw;
+  return absoluteUrl(raw.startsWith("/") ? raw : `/${raw}`);
+}
+
 export function BlogCard({ post }: BlogCardProps) {
   const date = new Date(post.publishedAt);
+  const image = coverSrc(post);
 
   return (
-    <Card className="h-full transition-shadow hover:shadow-md">
+    <Card className="h-full overflow-hidden transition-shadow hover:shadow-md">
+      {image ? (
+        <Link href={`/blog/${post.slug}`} className="relative block aspect-[16/9] bg-muted">
+          <Image src={image} alt="" fill className="object-cover" sizes="(max-width: 640px) 100vw, 320px" />
+        </Link>
+      ) : null}
       <CardHeader className="space-y-3">
         {post.category ? <Badge variant="secondary">{post.category}</Badge> : null}
         <CardTitle className="text-xl leading-snug">
