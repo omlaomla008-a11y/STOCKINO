@@ -87,6 +87,12 @@ export default function ConfidentialitePage() {
             </a>{" "}
             — mesure d&apos;audience
           </li>
+          <li>
+            <a href="https://www.google.com/adsense/" rel="noopener noreferrer" target="_blank">
+              Google AdSense
+            </a>{" "}
+            — affichage de publicités sur le hub public (le cas échéant)
+          </li>
         </ul>
         <p>
           Ces prestataires peuvent traiter des données hors Union européenne ; ils s&apos;engagent
@@ -97,9 +103,10 @@ export default function ConfidentialitePage() {
       <LegalSection title="Cookies">
         <p>
           Nous utilisons des cookies strictement nécessaires au fonctionnement (session
-          application, studio). Google Analytics peut déposer des cookies de mesure. Vous pouvez
-          les refuser ou les supprimer via les paramètres de votre navigateur ; certaines
-          fonctionnalités d&apos;analyse ne seront alors plus disponibles.
+          application, studio). Google Analytics et Google AdSense peuvent déposer des cookies de
+          mesure ou de publicité. Vous pouvez les refuser ou les supprimer via les paramètres de
+          votre navigateur ; certaines fonctionnalités d&apos;analyse ou d&apos;affichage ne seront
+          alors plus disponibles.
         </p>
       </LegalSection>
 

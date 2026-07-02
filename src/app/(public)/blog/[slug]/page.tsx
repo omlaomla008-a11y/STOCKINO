@@ -10,8 +10,10 @@ import { MarkdownContent } from "@/components/blog/markdown-content";
 import { HardwareCard } from "@/components/hardware/hardware-card";
 import { AffiliateDisclosure } from "@/components/hub/affiliate-disclosure";
 import { MoroccoDeliveryNote } from "@/components/hub/morocco-delivery-note";
+import { GoogleAdUnit } from "@/components/ads/google-ad-unit";
 import { shouldShowBlogAffiliateBlocks } from "@/lib/hub/blog-affiliate";
 import { normalizeBlogCoverSrc } from "@/lib/hub/blog-cover";
+import { getAdSenseBlogSlotId, getAdSenseClientId } from "@/lib/analytics/adsense";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,6 +60,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   const products = relatedProducts.filter((p) => p !== null);
   const showAffiliate = shouldShowBlogAffiliateBlocks(post);
   const coverSrc = normalizeBlogCoverSrc(post.coverImage);
+  const adsenseClient = getAdSenseClientId();
+  const adsenseBlogSlot = getAdSenseBlogSlotId();
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -114,6 +118,12 @@ export default async function BlogPostPage({ params }: PageProps) {
           <MoroccoDeliveryNote />
           <AffiliateDisclosure />
         </div>
+      ) : adsenseClient && adsenseBlogSlot ? (
+        <GoogleAdUnit
+          clientId={adsenseClient}
+          slot={adsenseBlogSlot}
+          className="mt-10 rounded-lg border bg-muted/30 p-4"
+        />
       ) : null}
 
       {products.length > 0 ? (

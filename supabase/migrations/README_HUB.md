@@ -100,3 +100,25 @@ NEXT_PUBLIC_SITE_CONTACT_EMAIL=contact@stockino.space
 ```
 
 Liens dans le pied de page de toutes les pages publiques du hub.
+
+## 9. Google AdSense (optionnel)
+
+Le script AdSense est chargé **uniquement sur le hub public** (`/`, `/blog`, `/hardware`…), pas sur l’app connectée (`/dashboard`).
+
+1. Postulez sur [Google AdSense](https://www.google.com/adsense/) avec `https://stockino.space`.
+2. Récupérez votre ID éditeur (`ca-pub-XXXXXXXXXXXXXXXX`).
+3. Ajoutez sur **Netlify** :
+
+```env
+NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-1569648268532720
+# ou pub-1569648268532720 (les deux formats sont acceptés)
+# Optionnel — emplacement display pour articles éditoriaux (sans Amazon) :
+NEXT_PUBLIC_ADSENSE_BLOG_SLOT=1234567890
+```
+
+4. Redéployez. Vérifiez `https://stockino.space/ads.txt`.
+5. Attendez l’**approbation Google** (quelques jours à plusieurs semaines). Un refus au premier essai est fréquent.
+
+**Annonces :** les articles « Guides d’achat » gardent Amazon ; les articles **Actualités / Logistique** peuvent afficher un bloc AdSense si `NEXT_PUBLIC_ADSENSE_BLOG_SLOT` est défini. Les **annonces auto** se configurent dans le panneau AdSense après validation.
+
+**Amazon + AdSense :** les deux peuvent coexister ; évitez de mélanger pub display et liens affiliés de façon trompeuse sur la même zone.
