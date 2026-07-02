@@ -15,6 +15,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MarkdownEditor } from "@/components/hub-admin/markdown-editor";
 import { Textarea } from "@/components/ui/textarea";
 
 const initialState: HubActionState = { status: "idle" };
@@ -144,20 +145,7 @@ export function BlogForm({ post, basePath = "/studio" }: BlogFormProps) {
         </p>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="content">Contenu (Markdown)</Label>
-        <Textarea
-          id="content"
-          name="content"
-          rows={16}
-          className="font-mono text-sm"
-          defaultValue={post?.content}
-          required
-        />
-        <p className="text-xs text-muted-foreground">
-          Utilisez ## pour les titres, **gras**, listes avec -, liens [texte](/hardware/slug)
-        </p>
-      </div>
+      <MarkdownEditor name="content" initialValue={post?.content ?? ""} required />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
